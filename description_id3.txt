@@ -1,0 +1,29 @@
+- Construction d'un arbre de decision avec l'algorithme id3
+
+1- Calculer l'entropy general H(x)
+2- Chercher le meilleur split et trouver l'attribut de base
+    3- En fonction des attributs et de leur valeur recommencer le processus sur 
+        le dataset restant
+    Cette etape est repeter pour chaque noeud
+
+
+Comment structurer mes noeud. Vu que un noeud peut avoir des arbres. Ceci 
+Sera fait sous forme de liste chainée. Un Noeud a pour nom l'identifiant d'un 
+attribut du jeu de donnees
+
+struct Branche{
+    char branche_val[100];
+    int  prediction=-1; //cette valeur a moins 1 
+}
+
+struct Noeud{
+    char name[100]={0};
+    int prediction=-1; //cette valeur a -1 signifie que nous avons encore des datas restant a predire
+    Branche branches[100]={0};
+    Noeud fils[100]={};
+}
+
+3- Composantes 
+
+Nous devons avoir une fonction qui lit un fichier donc le nombre de collone n'est pas connu a l'avance
+

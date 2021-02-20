@@ -1,0 +1,12 @@
+cyan;octogonal;petit;uniforme
+orange;hexagonal;petit;uniforme
+orange;octogonal;petit;rayé
+magenta;hexagonal;gigantesque;rayé
+cyan;hexagonal;gigantesque;rayé
+orange;octagonal;grand;uniforme
+magenta;pentagonal;gigantesque;rayé
+magenta;octogonal;grand;rayé
+magenta;octogonal;petit;rayé
+cyan;pentagonal;gigantesque;uniforme
+magenta;hexagonal;grand;rayé
+orange;hexagonal;grand;uniforme

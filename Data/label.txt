@@ -1,0 +1,12 @@
+comestible
+comestible
+non_comestible
+comestible
+comestible
+comestible
+non_comestible
+non_comestible
+comestible
+non_comestible
+non_comestible
+comestible
