@@ -3,6 +3,9 @@
 #ifndef STRUCTURE_H_INCLUDED
 #include "Header/entropy.h"
 #endif
+#ifndef FUNCTION_H_INCLUDED
+#include "Header/function.h"
+#endif
 #ifndef ENTROPY_H_INCLUDED
 #include "Header/entropy.h"
 #endif
@@ -16,7 +19,6 @@ int main(){
     int *target2=(int*)malloc(9*sizeof(int)); //reservation d'un tableau de 9 element
     printf("La valeur de ce tableau est %d \n\n",*target);
     MyString **mtsring;
-    //int length=entropy_general(target2,100,100);
     //int length=sizeof(target)/sizeof(*target);
     //printf("La taille du tableau est de %d \n\n",length);
     printf("\n Ici nous allons essayer d'obtenir des informations sur un fichier \n");
@@ -33,14 +35,36 @@ int main(){
     printf("La premiere ligne est\n%s",testchaine);
     printf("\n \n Maintenant nous devons faire les experiences de recuperations \n \n");
 
-    MyString **mtsring2=file_content("Data/data.txt",";");
-    for(int i=0;i<=rows;i++){
+    //MyString **mtsring2=file_content("Data/data.txt",";");
+    FeatureLine *features=file_content("Data/data.txt",";");
+    for(int i=0;i<rows;i++){
         printf("%d ->",i);
-        for(int j=0;j<=columns;j++){
-            printf("%s-",mtsring2[i][j].value);
+        for(int j=0;j<columns;j++){
+            printf("%s-",features[i].feature[j].value);
         }
         printf("\n");
     }
+    printf("\n \n");
+    FeatureLine *labels=file_content("Data/label.txt",";");
+    FeatureLine *headers_y=file_content("Data/header.txt",";");
+    MyString *labels_y=(MyString*)malloc(rows*sizeof(*labels_y));
+    printf("Display of new labels\n");
+    for(int i=0;i<rows;i++){
+        labels_y[i]=labels[i].feature[0];
+        printf("%s \n",labels_y[i].value);
+    }
+    fflush(stdin);
+    printf("Affichage des labels uniques %d \n",rows);
+    FeatureLine *uniquelabels=get_unique_element(labels_y,rows);
+    printf("\n Nous sortons de cette fonction \n");
+    char bjr[100];
+    for (int i=0;i<uniquelabels->id;i++){
+        printf("%s \n",uniquelabels->feature[i].value);
+        strcpy(bjr,uniquelabels->feature[i].value);
+        printf("%s vient dans le jeu de donnees %d fois \n",bjr,nb_times_in(bjr,labels_y,rows));
+    }
+    printf("\nlog2->%d\n",rows);
+    double entropy=entropy_general(labels_y,rows);
     
     return 0;
 }

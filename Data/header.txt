@@ -1,1 +1,4 @@
-couleur;forme;taille;motif
+couleur
+forme
+taille
+motif

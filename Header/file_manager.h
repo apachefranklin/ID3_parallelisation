@@ -4,7 +4,6 @@
 #define FILE_MANAGER_H_INCLUDED
 #ifndef STRUCTURE_H_INCLUDED
 #include "structure.h"
-
 #endif
 
 /*
@@ -44,9 +43,9 @@ int* file_information(char path[100],char sep[]){
            }
        }
    } while (currentC!=EOF);
-   toReturn[0]=nbMax;
-   toReturn[1]=nbLines;
-   toReturn[2]=nbInfoPerLine;
+   toReturn[0]=nbMax+1;
+   toReturn[1]=nbLines+1;
+   toReturn[2]=nbInfoPerLine+1;
    fclose(file);
    return toReturn;
 }
@@ -55,24 +54,29 @@ int* file_information(char path[100],char sep[]){
  * Cette fonction va ouvrir un fichier comme s'il s'agissait d'un fichier
  * elle va retourner un tableau a 2 dimension donc les lignes seront les 
 */
-MyString** file_content(char path[100],char sep[]){
+FeatureLine* file_content(char path[100],char sep[]){
     FILE* file=fopen(path,"r");
     int* file_info=file_information(path,sep);
-    int maxCaracters=(*(file_info))+1;
-    int rows=*(file_info+1)+1;
-    int columns=*(file_info+2)+1;
+    int maxCaracters=*file_info;
+    int rows=*(file_info+1);
+    int columns=*(file_info+2);
+    printf("\n\n nous l'avons quand meme traverser \n\n");
+    printf("Caractere max= %d \n",maxCaracters);
+    printf("Nombre de lingnes = %d \n",rows);
+    printf("Nombre de colones = %d \n",columns);
     /*
      * Maintenant que nous avons les parametres de la fonction fgets()
      * Nous pouvons maintenant faire des fgets et les analyser pour extraires les           informations donc nous aurons besoins
     */
-    MyString **mstring=(MyString **)malloc(rows * sizeof(MyString *)); ;
+    MyString **mstring=(MyString **)malloc(rows * sizeof(MyString *));
+    FeatureLine *features=(FeatureLine *)malloc(rows*sizeof(FeatureLine));
     //nous devons maintenant faire une allocation
     char curString[maxCaracters];
     char *token=NULL;
     char *token2=NULL;
     int j=0;
     //printf("\n Nous sommes encore dehors les gars \n");
-    for(int i=0;i<=rows;i++){
+    for(int i=0;i<rows;i++){
         token2=NULL;
         token=NULL;
         mstring[i]=(MyString*)malloc(columns*sizeof(MyString));
@@ -96,10 +100,12 @@ MyString** file_content(char path[100],char sep[]){
             token=strtok(NULL,sep);
             j++;
         }
-        
+        features[i].id=i;
+        features[i].feature=mstring[i];
         token=NULL;
         }
     
     fclose(file);
-    return mstring;
+    //return mstring;
+    return features;
 }
