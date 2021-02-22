@@ -55,16 +55,29 @@ int main(){
     }
     fflush(stdin);
     printf("Affichage des labels uniques %d \n",rows);
-    FeatureLine *uniquelabels=get_unique_element(labels_y,rows);
+    FeatureLine uniquelabels=get_unique_element(labels_y,rows);
     printf("\n Nous sortons de cette fonction \n");
     char bjr[100];
-    for (int i=0;i<uniquelabels->id;i++){
-        printf("%s \n",uniquelabels->feature[i].value);
-        strcpy(bjr,uniquelabels->feature[i].value);
+    for (int i=0;i<uniquelabels.id;i++){
+        printf("%s \n",uniquelabels.feature[i].value);
+        strcpy(bjr,uniquelabels.feature[i].value);
         printf("%s vient dans le jeu de donnees %d fois \n",bjr,nb_times_in(bjr,labels_y,rows));
     }
     printf("\nlog2->%d\n",rows);
     double entropy=entropy_general(labels_y,rows);
+    printf("\nL'entropy max est de de %f\n",entropy);
+    FeatureLine *test_col=get_feature_column(features,1,rows);
+
+    MyString *test_col2=(MyString*)malloc(rows*sizeof(*test_col2));
+    printf("Display of test col\n");
+    for(int i=0;i<rows;i++){
+        strcpy(test_col2[i].value,test_col[i].feature[0].value);
+        printf("%s \n",test_col2[i].value);
+    }
+    FeatureLine uniquefor_col=get_unique_element(test_col2,rows);
+
+    double* entropy_2=entropy_by_column_and_val(features,1,labels_y,uniquefor_col.feature[1].value,rows,columns);
     
+    printf("L'entropy de la colone i=%d pour la valeur v=%s est H=%f",0,uniquefor_col.feature[0].value,entropy_2[0]);
     return 0;
 }

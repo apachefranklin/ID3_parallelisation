@@ -10,13 +10,14 @@ typedef struct MyString MyString;
 struct MyString{
     char value[100];
 };
-typedef struct FeatureLine FeatureLine;
+
 
 /**
  * Structure definissant une ligne de notre jeu de donnees
  * on peut avoir nom prenom age 
  * representer par 1 nom prenom age 
 **/
+typedef struct FeatureLine FeatureLine;
 struct FeatureLine{
     MyString *feature;
     int id;
@@ -53,4 +54,13 @@ struct Noeud
     Branche *branches; 
     //represente les branches possibles
     Noeud *fils;
+};
+
+/**
+ * cette structure represente l'arbre
+ * de decision qui sera construit du noeud racine
+*/
+typedef struct Tree Tree;
+struct Tree{
+    Noeud racine;
 };

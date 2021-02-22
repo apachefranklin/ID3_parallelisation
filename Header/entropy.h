@@ -14,7 +14,6 @@
 /**
  * Cette fonction prend calcule l'entropy sur une portion du jeu de donnees
  * Cette portion peut etre total ou bien elle partiel
- * @author apache
  * @param **x qui represente l'ensemble des features Categoriel
  * @param *y qui represente l'ensemble des labels categoriel
  * @param nb_line qui represente ici le nombre line de notre jeu de donnees
@@ -29,9 +28,9 @@ double entropy_general(MyString *y,int nb_line){
     
     char temp[100];
     double lines=(double)nb_line,nb_times,frequence=0.0,entropy=0.0;
-    FeatureLine *uniquesd=get_unique_element(y,nb_line);
-    for(int i=0;i<uniquesd->id;i++){
-        strcpy(temp,uniquesd->feature[i].value);
+    FeatureLine uniquesd=get_unique_element(y,nb_line);
+    for(int i=0;i<uniquesd.id;i++){
+        strcpy(temp,uniquesd.feature[i].value);
         nb_times=(double)nb_times_in(temp,y,nb_line);
         frequence=nb_times/nb_line;
         frequence=-(frequence*log2(frequence));
@@ -40,4 +39,46 @@ double entropy_general(MyString *y,int nb_line){
    
     
     return entropy;
+}
+
+/**
+ * Cette fonction prend en entre une liste de feature
+ * un index de column et une valeur de cette column ensuite
+ * Calul l'entropy de cet echantillon et retourne une liste de nombre
+ * ou le premier element est l'entropy et le second est la taille du sous echantillons/echantillonage toale
+ * @return [entropy,rapport,entropy*rapport]
+ */
+double* entropy_by_column_and_val(FeatureLine *features,int col_index,MyString *labels,char *value,int rows,int columns){
+    double entropy_by_val=0.0;
+    MyString column[rows];
+    MyString row_for_val[rows];
+    MyString labels_for_val[rows];
+    /**
+     * on va d'abord commencer par recuperer tous les elements
+     * de la colonnes
+    */
+   printf("\n Recuperation de la colonne \n");
+   int size_for_val=0;
+   for(int i=0;i<rows;i++){
+        strcpy(column[i].value,features[i].feature[col_index].value);
+        printf("%s && %s \n",column[i].value,value);
+        if(strcmp(column[i].value,value)==0){
+            strcpy(labels_for_val[size_for_val].value,labels[i].value);
+            size_for_val++;
+        }
+        //printf("c-%d -> %s\n",i,column[i].value)
+   }
+   printf("Le size la est %d\n",size_for_val);
+    entropy_by_val=entropy_general(labels_for_val,size_for_val);
+    double *toreturn=malloc(3*sizeof(*toreturn));
+    toreturn[0]=entropy_by_val;
+    toreturn[1]=size_for_val/rows;
+    toreturn[2]=toreturn[1]*entropy_by_val;
+    return toreturn;
+}
+
+double information_gain(double entropy_g,double *entropy_partiel,int nb_elements){
+    double gain=0.0;
+
+    return gain;
 }

@@ -9,7 +9,6 @@
 /*
     Cette fonction retourne le nombre d'element de ligne que contient le fichier
     En seconde position retourne le nombre de caractere max d'une line
-    @author apache
     @param char path[100]: est le chemin du fichier
     @param char separator: est le separateur qui va etre utiliser a fin de determiner le nombre d'information par ligne
     @return [nb_max_line_size,nb_line_of_file,nb_information_per_line]

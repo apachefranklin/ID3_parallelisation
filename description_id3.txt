@@ -27,3 +27,7 @@ struct Noeud{
 
 Nous devons avoir une fonction qui lit un fichier donc le nombre de collone n'est pas connu a l'avance
 
+
+4-Procedure pour Calculer le gain d'information
+    Pour calculer ce gain, nous allons prendre chaque attribut et calculer la 
+    dans un premier temps, l'entropy pour chaque valeur de la colone

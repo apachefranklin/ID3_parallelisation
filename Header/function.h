@@ -12,7 +12,7 @@
  * d'elements et retourne la liste des elements unique
  * 
  */
-FeatureLine* get_unique_element(MyString elts[],int nbelements)
+FeatureLine get_unique_element(MyString elts[],int nbelements)
 {
 
     MyString bonjour={"ui454bbfkabvslklfiusabkla"};
@@ -40,23 +40,28 @@ FeatureLine* get_unique_element(MyString elts[],int nbelements)
             }
         }
         if(trouve==0){
-                printf("an unique %i ->\n",i);
+                //printf("an unique %s ->\n",elts[i].value);
                 strcpy(uniqueelt[nb_unique].value,elts[i].value);
                 nb_unique++;
         }
         trouve=0;
     }
-    printf("***bonjour la fin****\n");
-    FeatureLine *features;
+    
+    FeatureLine features;
+   
     //FeatureLine* unique2=(FeatureLine*)malloc(nb_unique*sizeof(FeatureLine));
-    features->feature=uniqueelt;
-    features->id=nb_unique;
+    features.feature=uniqueelt;
+    features.id=nb_unique;
+    /*printf("***bonjour la fin****\n");
+    
     printf("Le nombre d'elt unique est %d \n",nb_unique);
     //printf("--------\n");
     for(int i=0;i<nb_unique;i++){
         //unique2[i]=uniqueelt[2];
-        printf("hu->%s -- ",features->feature[i].value);
+        printf("hu->%s -- ",features.feature[i].value);
     }
+    printf("\n");
+    */
     //features.feature=unique2;
     return features;
 }
@@ -65,6 +70,25 @@ FeatureLine* get_unique_element(MyString elts[],int nbelements)
  * Fonction qui prend en prametre un elet et renvois le 
  * nombre de fois qui'il apparait dans la liste
  */
+FeatureLine* get_feature_column(FeatureLine *feature,int col_index,int rows){
+    FeatureLine *features;
+    features=malloc(rows*sizeof(*features));
+    for(int i=0;i<rows;i++){
+        //strcpy((*(features+i)).feature[0].value,feature[i].feature[col_index].value);
+        features[i].id=feature[i].id;
+        features[i].feature=&feature[i].feature[col_index];
+        //printf("hello %s\n",features[i].feature[0].value);
+    }
+    return features;
+}
+
+/**
+ * Retroune le nom de fois que elt apparait dans list
+ * 
+ * @param char elt
+ * @param MyString list
+ * @param int nb_elt
+ */ 
 int nb_times_in(char elt[],MyString list[],int nb_elt){
     int nb=0;
     for(int i=0;i<nb_elt;i++){
