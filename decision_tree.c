@@ -36,7 +36,7 @@ int main(){
     printf("\n \n Maintenant nous devons faire les experiences de recuperations \n \n");
 
     //MyString **mtsring2=file_content("Data/data.txt",";");
-    FeatureLine *features=file_content("Data/data.txt",";");
+    Feature *features=file_content("Data/data.txt",";");
     for(int i=0;i<rows;i++){
         printf("%d ->",i);
         for(int j=0;j<columns;j++){
@@ -45,8 +45,8 @@ int main(){
         printf("\n");
     }
     printf("\n \n");
-    FeatureLine *labels=file_content("Data/label.txt",";");
-    FeatureLine *headers_y=file_content("Data/header.txt",";");
+    Feature *labels=file_content("Data/label.txt",";");
+    Feature *headers_y=file_content("Data/header.txt",";");
     MyString *labels_y=(MyString*)malloc(rows*sizeof(*labels_y));
     printf("Display of new labels\n");
     for(int i=0;i<rows;i++){
@@ -55,7 +55,7 @@ int main(){
     }
     fflush(stdin);
     printf("Affichage des labels uniques %d \n",rows);
-    FeatureLine uniquelabels=get_unique_element(labels_y,rows);
+    Feature uniquelabels=get_unique_element(labels_y,rows);
     printf("\n Nous sortons de cette fonction \n");
     char bjr[100];
     for (int i=0;i<uniquelabels.id;i++){
@@ -66,7 +66,7 @@ int main(){
     printf("\nlog2->%d\n",rows);
     double entropy=entropy_general(labels_y,rows);
     printf("\nL'entropy max est de de %f\n",entropy);
-    FeatureLine *test_col=get_feature_column(features,1,rows);
+    Feature *test_col=get_feature_column(features,1,rows);
 
     MyString *test_col2=(MyString*)malloc(rows*sizeof(*test_col2));
     printf("Display of test col\n");
@@ -74,10 +74,17 @@ int main(){
         strcpy(test_col2[i].value,test_col[i].feature[0].value);
         printf("%s \n",test_col2[i].value);
     }
-    FeatureLine uniquefor_col=get_unique_element(test_col2,rows);
+    Feature uniquefor_col=get_unique_element(test_col2,rows);
 
     double* entropy_2=entropy_by_column_and_val(features,1,labels_y,uniquefor_col.feature[1].value,rows);
     
     printf("L'entropy de la colone i=%d pour la valeur v=%s est H=%f",0,uniquefor_col.feature[0].value,entropy_2[0]);
+    double inf_gain=0.0;
+    for(int i=0;i<columns;i++){
+        inf_gain=information_gain(entropy,features,labels_y,i,rows);
+        printf("\n \nLe gain d'information de la colone **%s** est %f\n",headers_y[i].feature[0].value,inf_gain);
+    }
+    
+   
     return 0;
 }

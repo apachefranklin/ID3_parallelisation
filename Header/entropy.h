@@ -24,10 +24,10 @@
 
 double entropy_general(MyString *y,int nb_line){
     //on recupere la taille des elements du tableau 
-    printf("\n--Welcome to entropy function --\n");
+    //printf("\n--Welcome to entropy function --\n");
     char temp[100];
     double lines=(double)nb_line,nb_times,frequence=0.0,entropy=0.0;
-    FeatureLine uniquesd=get_unique_element(y,nb_line);
+    Feature uniquesd=get_unique_element(y,nb_line);
     for(int i=0;i<uniquesd.id;i++){
         strcpy(temp,uniquesd.feature[i].value);
         nb_times=(double)nb_times_in(temp,y,nb_line);
@@ -45,9 +45,11 @@ double entropy_general(MyString *y,int nb_line){
  * un index de column et une valeur de cette column ensuite
  * Calul l'entropy de cet echantillon et retourne une liste de nombre
  * ou le premier element est l'entropy et le second est la taille du sous echantillons/echantillonage toale
- * @return [entropy,rapport,entropy*rapport]
+ * le 3 eme est le rapport nblet/nbelttotal
+ * le 4eme est entropy*rapport
+ * @return [entropy,nb_elt,rapport,entropy*rapport,]
  */
-double* entropy_by_column_and_val(FeatureLine *features,int col_index,MyString *labels,char *value,int rows){
+double* entropy_by_column_and_val(Feature *features,int col_index,MyString *labels,char *value,int rows){
     double entropy_by_val=0.0;
     MyString column[rows];
     MyString row_for_val[rows];
@@ -56,23 +58,26 @@ double* entropy_by_column_and_val(FeatureLine *features,int col_index,MyString *
      * on va d'abord commencer par recuperer tous les elements
      * de la colonnes
     */
-   printf("\n Recuperation de la colonne \n");
+   //printf("\n Recuperation de la colonne \n");
    int size_for_val=0;
    for(int i=0;i<rows;i++){
         strcpy(column[i].value,features[i].feature[col_index].value);
-        printf("%s && %s \n",column[i].value,value);
+        //printf("%s && %s \n",column[i].value,value);
         if(strcmp(column[i].value,value)==0){
             strcpy(labels_for_val[size_for_val].value,labels[i].value);
             size_for_val++;
         }
         //printf("c-%d -> %s\n",i,column[i].value)
    }
-   printf("Le size la est %d\n",size_for_val);
+   //printf("Le size la est %d\n",size_for_val);
     entropy_by_val=entropy_general(labels_for_val,size_for_val);
-    double *toreturn=malloc(3*sizeof(*toreturn));
+   //printf("Yo les gars %f\n",entropy_by_val);
+    double *toreturn=malloc(4*sizeof(*toreturn));
     toreturn[0]=entropy_by_val;
-    toreturn[1]=size_for_val/rows;
-    toreturn[2]=toreturn[1]*entropy_by_val;
+    toreturn[1]=(double)size_for_val;
+    toreturn[2]=((double)size_for_val)/rows;
+    toreturn[3]=toreturn[2]*entropy_by_val;
+    
     return toreturn;
 }
 
@@ -85,17 +90,22 @@ double* entropy_by_column_and_val(FeatureLine *features,int col_index,MyString *
  * @param double* entropy_partiel is the entropy of different value.
  * @param int rows est le nombre d'element total de notre datasets
 */
-double information_gain(double h_x,FeatureLine *features,MyString *labels,int col_index,int rows){
+double information_gain(double h_x,Feature *features,MyString *labels,int col_index,int rows){
     double gain=0.0;
     MyString colmun[rows];
     char value[100];
+    //printf("\n\n________________________________________________%d\n",col_index);
     for(int i=0;i<rows;i++){
         strcpy(colmun[i].value,features[i].feature[col_index].value);
     }
-    FeatureLine unique_elts=get_unique_element(colmun,rows);
+    Feature unique_elts=get_unique_element(colmun,rows);
+    double somme=0.0;
     for(int i=0;i<unique_elts.id;i++){
         strcpy(value,unique_elts.feature[i].value);
-        double *current_entropy=entropy_by_column_and_val(features,col_index,labels,value,rows);
+        //printf("\n%s->%d\n",value,col_index);
+        double *hc=entropy_by_column_and_val(features,col_index,labels,value,rows);
+        //printf("\n H=%f,NBELT=%f,rapport=%f,H*R=%f\n",hc[0],hc[1],hc[2],hc[3]);
+        somme+=((hc[1]/rows)*hc[0]);
     }
-    return gain;
+    return h_x-somme;
 }

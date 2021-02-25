@@ -25,8 +25,8 @@ int main(){
     printf("Le nombre d'informations par ligne est %d \n",columns);
     printf("Le nombre de  lignes est %d \n\n",rows);
 
-    FeatureLine *labels=file_content("Data/label.txt",";");
-    FeatureLine *headers_y=file_content("Data/header.txt",";");
+    Feature *labels=file_content("Data/label.txt",";");
+    Feature *headers_y=file_content("Data/header.txt",";");
     MyString *labels_y=(MyString*)malloc(rows*sizeof(*labels_y));
     printf("Display of new labels\n");
     for(int i=0;i<rows;i++){

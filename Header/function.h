@@ -12,12 +12,11 @@
  * d'elements et retourne la liste des elements unique
  * 
  */
-FeatureLine get_unique_element(MyString elts[],int nbelements)
+Feature get_unique_element(MyString elts[],int nbelements)
 {
-
-    MyString bonjour={"ui454bbfkabvslklfiusabkla"};
-    MyString uniqueelt[nbelements];
-    FeatureLine *feature;
+    //MyString uniqueelt[nbelements];
+    MyString *uniqueelt=(MyString*)malloc(nbelements*sizeof(*uniqueelt));
+    Feature *feature;
     //MyString *uniqueelt;
     
     for (int i=0;i<nbelements;i++){
@@ -47,12 +46,13 @@ FeatureLine get_unique_element(MyString elts[],int nbelements)
         trouve=0;
     }
     
-    FeatureLine features;
+    Feature features;
    
-    //FeatureLine* unique2=(FeatureLine*)malloc(nb_unique*sizeof(FeatureLine));
+    //Feature* unique2=(Feature*)malloc(nb_unique*sizeof(Feature));
     features.feature=uniqueelt;
     features.id=nb_unique;
-    /*printf("***bonjour la fin****\n");
+    /*
+    printf("***bonjour la fin****\n");
     
     printf("Le nombre d'elt unique est %d \n",nb_unique);
     //printf("--------\n");
@@ -69,13 +69,13 @@ FeatureLine get_unique_element(MyString elts[],int nbelements)
 /**
  * Fonction qui prend un enmble de feature et retourne uniquement
  * La colone de l'index toujours sours forme de liste de features
- * @param FeatureLine feature est la liste des feature
+ * @param Feature feature est la liste des feature
  * @param int col_index est la colone qu'on veut exraire de notre liste de feature
  * @param int rows est le nombre de ligne de notre liste de features
- * @return FeatureLine *features
+ * @return Feature *features
  */
-FeatureLine* get_feature_column(FeatureLine *feature,int col_index,int rows){
-    FeatureLine *features;
+Feature* get_feature_column(Feature *feature,int col_index,int rows){
+    Feature *features;
     features=malloc(rows*sizeof(*features));
     for(int i=0;i<rows;i++){
         //strcpy((*(features+i)).feature[0].value,feature[i].feature[col_index].value);

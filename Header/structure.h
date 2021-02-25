@@ -17,12 +17,26 @@ struct MyString{
  * on peut avoir nom prenom age 
  * representer par 1 nom prenom age 
 **/
-typedef struct FeatureLine FeatureLine;
-struct FeatureLine{
+typedef struct Feature Feature;
+struct Feature{
     MyString *feature;
     int id;
 };
 
+/**
+ * Cette structure permet de representer
+ * soit tout soit une partir de notre 
+ * jeu de donnée
+*/
+typedef struct Dataset Dataset;
+struct Dataset
+{
+    Feature *features;
+    MyString *colnames;
+    MyString *targets;
+    int rows;
+    int nbcols;
+};
 
 /**
  * Cette struture represente la branche d'un arbre
