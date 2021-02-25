@@ -67,8 +67,12 @@ FeatureLine get_unique_element(MyString elts[],int nbelements)
 }
 
 /**
- * Fonction qui prend en prametre un elet et renvois le 
- * nombre de fois qui'il apparait dans la liste
+ * Fonction qui prend un enmble de feature et retourne uniquement
+ * La colone de l'index toujours sours forme de liste de features
+ * @param FeatureLine feature est la liste des feature
+ * @param int col_index est la colone qu'on veut exraire de notre liste de feature
+ * @param int rows est le nombre de ligne de notre liste de features
+ * @return FeatureLine *features
  */
 FeatureLine* get_feature_column(FeatureLine *feature,int col_index,int rows){
     FeatureLine *features;

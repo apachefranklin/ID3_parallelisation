@@ -76,7 +76,7 @@ int main(){
     }
     FeatureLine uniquefor_col=get_unique_element(test_col2,rows);
 
-    double* entropy_2=entropy_by_column_and_val(features,1,labels_y,uniquefor_col.feature[1].value,rows,columns);
+    double* entropy_2=entropy_by_column_and_val(features,1,labels_y,uniquefor_col.feature[1].value,rows);
     
     printf("L'entropy de la colone i=%d pour la valeur v=%s est H=%f",0,uniquefor_col.feature[0].value,entropy_2[0]);
     return 0;
