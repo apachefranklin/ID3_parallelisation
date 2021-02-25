@@ -84,7 +84,6 @@ int main(){
         inf_gain=information_gain(entropy,features,labels_y,i,rows);
         printf("\n \nLe gain d'information de la colone **%s** est %f\n",headers_y[i].feature[0].value,inf_gain);
     }
-    
    
     return 0;
 }
