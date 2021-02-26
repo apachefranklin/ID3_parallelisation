@@ -144,3 +144,12 @@ void inMemomeryBuild(Node *noeud,Dataset *dataset,int cols_to_avoid[],int nb_col
     */
     
 }
+
+
+/**
+ * Cette fonction prend en parametre 
+ * un dataset sans targets et retourne 
+ * un datasets avec des targets
+ * @param Dataset *dataset with empty targets
+ * @return Dataset with full target
+*/
