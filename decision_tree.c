@@ -53,6 +53,7 @@ int main(){
         labels_y[i]=labels[i].feature[0];
         printf("%s \n",labels_y[i].value);
     }
+    Dataset dataset={features,labels_y,labels_y,rows,cosl};
     fflush(stdin);
     printf("Affichage des labels uniques %d \n",rows);
     Feature uniquelabels=get_unique_element(labels_y,rows);
@@ -66,7 +67,7 @@ int main(){
     printf("\nlog2->%d\n",rows);
     double entropy=entropy_general(labels_y,rows);
     printf("\nL'entropy max est de de %f\n",entropy);
-    Feature *test_col=get_feature_column(features,1,rows);
+    Feature *test_col=get_feature_column(features,1);
 
     MyString *test_col2=(MyString*)malloc(rows*sizeof(*test_col2));
     printf("Display of test col\n");
@@ -76,12 +77,12 @@ int main(){
     }
     Feature uniquefor_col=get_unique_element(test_col2,rows);
 
-    double* entropy_2=entropy_by_column_and_val(features,1,labels_y,uniquefor_col.feature[1].value,rows);
+    double* entropy_2=entropy_by_column_and_val(&dataset,1,uniquefor_col.feature[1].value);
     
     printf("L'entropy de la colone i=%d pour la valeur v=%s est H=%f",0,uniquefor_col.feature[0].value,entropy_2[0]);
     double inf_gain=0.0;
     for(int i=0;i<columns;i++){
-        inf_gain=information_gain(entropy,features,labels_y,i,rows);
+        inf_gain=information_gain(entropy,&dataset,i);
         printf("\n \nLe gain d'information de la colone **%s** est %f\n",headers_y[i].feature[0].value,inf_gain);
     }
    

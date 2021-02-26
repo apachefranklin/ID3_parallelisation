@@ -39,7 +39,13 @@ double entropy_general(MyString *y,int nb_line){
     
     return entropy;
 }
-
+/**
+ * Prend en parametre un dataset 
+ * et retourne son entropy
+ */
+double entropy_by_dataset(Dataset *dataset){
+    return entropy_general(dataset->targets,dataset->rows);
+}
 /**
  * Cette fonction prend en entre une liste de feature
  * un index de column et une valeur de cette column ensuite
@@ -49,8 +55,11 @@ double entropy_general(MyString *y,int nb_line){
  * le 4eme est entropy*rapport
  * @return [entropy,nb_elt,rapport,entropy*rapport,]
  */
-double* entropy_by_column_and_val(Feature *features,int col_index,MyString *labels,char *value,int rows){
+double* entropy_by_column_and_val(Dataset *dataset,int col_index,char *value){
     double entropy_by_val=0.0;
+    Feature *features=dataset->features;
+    MyString *labels=dataset->targets;
+    int rows=dataset->rows;
     MyString column[rows];
     MyString row_for_val[rows];
     MyString labels_for_val[rows];
@@ -90,7 +99,10 @@ double* entropy_by_column_and_val(Feature *features,int col_index,MyString *labe
  * @param double* entropy_partiel is the entropy of different value.
  * @param int rows est le nombre d'element total de notre datasets
 */
-double information_gain(double h_x,Feature *features,MyString *labels,int col_index,int rows){
+double information_gain(double h_x,Dataset *dataset,int col_index){
+    Feature *features=dataset->features;
+    MyString *labels=dataset->targets;
+    int rows=dataset->rows;
     double gain=0.0;
     MyString colmun[rows];
     char value[100];
@@ -103,7 +115,7 @@ double information_gain(double h_x,Feature *features,MyString *labels,int col_in
     for(int i=0;i<unique_elts.id;i++){
         strcpy(value,unique_elts.feature[i].value);
         //printf("\n%s->%d\n",value,col_index);
-        double *hc=entropy_by_column_and_val(features,col_index,labels,value,rows);
+        double *hc=entropy_by_column_and_val(dataset,col_index,value);
         //printf("\n H=%f,NBELT=%f,rapport=%f,H*R=%f\n",hc[0],hc[1],hc[2],hc[3]);
         somme+=((hc[1]/rows)*hc[0]);
     }
