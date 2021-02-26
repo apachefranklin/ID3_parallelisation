@@ -45,23 +45,6 @@ struct Dataset
 };
 
 /**
- * Cette struture represente la branche d'un arbre
- * Ici nous devons connaitre le contenu d'une branche
-*/
-typedef struct Branche Branche;
-struct Branche
-{
-    char name[100]; 
-    /*
-        name represente le nom de la branche c'est grace a lui, 
-        qu'on saura la decision
-        a prendre
-        Il est en fait la valeur d'un attribut
-    */
-   int prediction; //cette variable est utiliser dans le cas ou nous avons a faire a une prediction
-};
-
-/**
  * Cette structure represente un noeud
  * de l'arbre de decision
 */
@@ -69,9 +52,10 @@ typedef struct Node Node;
 struct Node
 {
     char name[100];
-    int prediction; 
+    int prediction;
+    int length; //represente le nombre de branches ainsi que de fils
     //cette valeur a -1 signifie que nous avons encore des datas restant a predire
-    Branche *branches; 
+    MyString *branches; 
     //represente les branches possibles
     Node *fils;
 };

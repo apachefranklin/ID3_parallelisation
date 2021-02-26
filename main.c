@@ -6,12 +6,13 @@
 #ifndef FUNCTION_H_INCLUDED
 #include "Header/function.h"
 #endif
-#ifndef ENTROPY_H_INCLUDED
-#include "Header/entropy.h"
-#endif
 
 #ifndef FILE_MANAGER_H_INCLUDED
 #include "Header/file_manager.h"
+#endif
+
+#ifndef DECISION_TREE_H_INCLUDED
+#include "Header/decision_tree.h"
 #endif
 
 int main(){
@@ -56,5 +57,12 @@ int main(){
     double hx2=entropy_by_dataset(&dataset);
     printf("entropy = %f\n",hx);
     printf("entropy by dataset = %f\n",hx2);
+
+    printf("\n\n**** Maintenant nous passons a la construction de l'arbre *** \n\n");
+    
+    Node *noeud=(Node*)malloc(sizeof(*noeud));
+    int cols_to_avoid[cols];
+    for(int i=0;i<cols;i++) cols_to_avoid[i]=-1;
+    inMemomeryBuild(noeud,&dataset,cols_to_avoid,cols);
     return 0;
 }

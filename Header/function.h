@@ -234,3 +234,64 @@ void print_dataset(Dataset *dataset){
     printf("\n***********************************************************************************************\n");
 }
 
+/**
+ * cette fonction prend en parametre un double 
+ * et verife s'il existe dans une liste 
+ * de double
+ * @param nb:double le nombre a chercher
+ * @param list[]:double la liste de nombre ou chercher
+ * @param size:int la taille de la liste de nombre
+ * @return 0 ou 1 0 si pas trouvé et 1 si trouvé
+*/
+int exist_in(double nb,double list[],int size){
+    int exist=0;
+    if(size>0){
+        int j=0;
+        while (j<size && exist==0)
+        {
+            if(list[j]==nb) exist=1;
+            j++;   
+        }
+    }
+    return exist;
+}
+
+/**
+ * cette fonction prend en parametre un entier
+ * et verife s'il existe dans une liste d'entier
+ * @param nb:int le nombre a chercher
+ * @param list[]:int la liste de nombre ou chercher
+ * @param size:int la taille de la liste de nombre
+ * @return 0 ou 1 0 si pas trouvé et 1 si trouvé
+*/
+int exist_ini(int nb,int list[],int size){
+    int exist=0;
+    if(size>0){
+        int j=0;
+        while (j<size && exist==0)
+        {
+            if(list[j]==nb) exist=1;
+            j++;   
+        }
+    }
+    return exist;
+}
+
+
+/**
+ * Cette foncton prend en parametre
+ * un tableau et retourne l'indice de 
+ * l'element maximal
+ * @param table[]:double
+ * @param size:int
+ * @return indice_max ou table[indice_max]=max(table)
+*/
+int get_indice_max(double table[],int size){
+    int indice_max=0;
+    for(int i=1;i<size;i++){
+        if(table[indice_max]<table[i]){
+            indice_max=i;
+        }
+    }
+    return indice_max;
+}
