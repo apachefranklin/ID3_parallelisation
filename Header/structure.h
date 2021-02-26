@@ -27,6 +27,12 @@ struct Feature{
  * Cette structure permet de representer
  * soit tout soit une partir de notre 
  * jeu de donnée
+ * @property Feature *features
+ * @property MyString *colnames
+ * @property Mystring *targets
+ * @property int rows
+ * @property int nbcols
+ * @param param features,colnames,targets,rows,cols;
 */
 typedef struct Dataset Dataset;
 struct Dataset
@@ -35,7 +41,7 @@ struct Dataset
     MyString *colnames;
     MyString *targets;
     int rows;
-    int nbcols;
+    int cols;
 };
 
 /**
@@ -59,15 +65,15 @@ struct Branche
  * Cette structure represente un noeud
  * de l'arbre de decision
 */
-typedef struct Noeud Noeud;
-struct Noeud
+typedef struct Node Node;
+struct Node
 {
     char name[100];
     int prediction; 
     //cette valeur a -1 signifie que nous avons encore des datas restant a predire
     Branche *branches; 
     //represente les branches possibles
-    Noeud *fils;
+    Node *fils;
 };
 
 /**
@@ -76,5 +82,5 @@ struct Noeud
 */
 typedef struct Tree Tree;
 struct Tree{
-    Noeud racine;
+    Node root;
 };

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #ifndef STRUCTURE_H_INCLUDED
-#include "Header/entropy.h"
+#include "Header/structure.h"
 #endif
 #ifndef FUNCTION_H_INCLUDED
 #include "Header/function.h"

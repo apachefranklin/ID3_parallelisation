@@ -72,7 +72,7 @@ double* entropy_by_column_and_val(Feature *features,int col_index,MyString *labe
    //printf("Le size la est %d\n",size_for_val);
     entropy_by_val=entropy_general(labels_for_val,size_for_val);
    //printf("Yo les gars %f\n",entropy_by_val);
-    double *toreturn=malloc(4*sizeof(*toreturn));
+    double *toreturn=(double*)malloc(4*sizeof(*toreturn));
     toreturn[0]=entropy_by_val;
     toreturn[1]=(double)size_for_val;
     toreturn[2]=((double)size_for_val)/rows;
@@ -109,3 +109,5 @@ double information_gain(double h_x,Feature *features,MyString *labels,int col_in
     }
     return h_x-somme;
 }
+
+

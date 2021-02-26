@@ -6,6 +6,56 @@
 #include "structure.h"
 #endif
 
+/**
+ * Prend une liste de feature en parametre et renvoies 
+ * les elements unique d'une colonne donnee
+ * @return [feature] ou id represente le nombre d'element unique
+**/
+Feature get_unique_elementF(Feature *features,int col_index,int nbelements){
+    //MyString uniqueelt[nbelements];
+    MyString *uniqueelt=(MyString*)malloc(nbelements*sizeof(*uniqueelt));
+    Feature *feature;
+    //MyString *uniqueelt;
+    
+    for (int i=0;i<nbelements;i++){
+        strcpy(uniqueelt[i].value," ");
+    }
+    int nb_unique=0;
+    int trouve=0;
+    for(int i=0;i<nbelements;i++){
+        for(int j=0;j<=i;j++){
+            if (strcmp(features[i].feature[col_index].value,uniqueelt[j].value)==0){
+                //printf("%s == %s \n",elts[i].value,uniqueelt[j].value);
+                trouve=1;
+            }
+        }
+        if(trouve==0){
+                //printf("an unique %s ->\n",elts[i].value);
+                strcpy(uniqueelt[nb_unique].value,features[i].feature[col_index].value);
+                nb_unique++;
+        }
+        trouve=0;
+    }
+    
+    Feature featuress;
+   
+    //Feature* unique2=(Feature*)malloc(nb_unique*sizeof(Feature));
+    featuress.feature=uniqueelt;
+    featuress.id=nb_unique;
+    /*
+    printf("***bonjour la fin****\n");
+    
+    printf("Le nombre d'elt unique est %d \n",nb_unique);
+    //printf("--------\n");
+    for(int i=0;i<nb_unique;i++){
+        //unique2[i]=uniqueelt[2];
+        printf("hu->%s -- ",features.feature[i].value);
+    }
+    printf("\n");
+    */
+    //features.feature=unique2;
+    return featuress;
+}
 
 /**
  * cette fonction prends en parametre un ensemble
@@ -22,13 +72,6 @@ Feature get_unique_element(MyString elts[],int nbelements)
     for (int i=0;i<nbelements;i++){
         strcpy(uniqueelt[i].value," ");
     }
-   /*
-    for (int i=0;i<nbelements;i++){
-        printf("la val modifier est %d %s \n",i,uniqueelt[i].value);
-    }
-    */
-    //MyString *uniqueelt;
-    //*uniqueelt=bonjour;
     int nb_unique=0;
     int trouve=0;
     for(int i=0;i<nbelements;i++){
@@ -76,7 +119,7 @@ Feature get_unique_element(MyString elts[],int nbelements)
  */
 Feature* get_feature_column(Feature *feature,int col_index,int rows){
     Feature *features;
-    features=malloc(rows*sizeof(*features));
+    features=(Feature*)malloc(rows*sizeof(*features));
     for(int i=0;i<rows;i++){
         //strcpy((*(features+i)).feature[0].value,feature[i].feature[col_index].value);
         features[i].id=feature[i].id;
@@ -102,4 +145,83 @@ int nb_times_in(char elt[],MyString list[],int nb_elt){
     }
     return nb;
 }
+/**
+ * Retourne le nombre de fois qu'un entier apparait dans une liste
+ */
+int nb_times_inI(int elt,int list[],int nb_elt){
+    int nb=0;
+    for(int i=0;i<nb_elt;i++){
+        if(elt==list[i]){
+            nb++;
+        }
+    }
+    return nb;
+}
+
+/**
+ * Cette fonction retourne le nombre de fois qu'un element
+ * apparait dans une colone d'une liste de feature 
+ * precise
+ */
+int nb_times_inF(Feature *features,char elt[],int col_index,int nb_elt){
+    int nb=0;
+    for(int i=0;i<nb_elt;i++){
+        if(strcasecmp(elt,features[i].feature[col_index].value)==0){
+            nb++;
+        }
+    }
+    return nb;
+}
+/**
+ * Cette fonction prend en pametre un dataset
+ * et retoune un autre dataset composer unquement 
+ * des lignes ou la valeur de la colonne col_index veaut val
+*/
+
+Feature* dataset_col_and_val(Dataset *dataset,int col_index,char val[]){
+    Feature *features=dataset->features;
+    //Feature unique_col_element=get_unique_elementF(features,col_index,dataset->rows);
+    int nb_unique=nb_times_inF(features,val,col_index,dataset->rows);
+    //on recupere le nombre de fois que l'element viens dans la colonne
+    printf("\n---Before malloc---- nb_unique=%d\n",nb_unique);
+    Feature *_features=(Feature*)malloc(nb_unique*sizeof(*_features));
+    
+    //toreturn->features=_features;
+    int rows=dataset->rows;
+    int j=0;
+    
+    for(int i=0;i<rows,j<nb_unique;i++){
+        if(strcmp(features[i].feature[col_index].value,val)==0){
+            _features[j]=features[i];
+            j++;
+        }
+    }
+    printf("\nAffetre\n");
+    /*
+    toreturn->rows=nb_unique;
+    toreturn->features=_features;
+    toreturn->colnames=dataset->colnames;
+    toreturn->targets=dataset->targets;
+    toreturn->cols=dataset->cols;
+    */
+    return _features;
+}
  
+
+ /**
+  * Cette fonction prend en prametre un dataset 
+  * et l'affiche a l'ecran
+*/
+
+void print_dataset(Feature *dataset,int rows,int cols){
+    printf("\n***************************\n");
+    //int rows=dataset->rows,cols=dataset->cols;
+    for(int i=0;i<rows;i++){
+        printf("%d: id=%d::",i,dataset[i].id);
+        for (int j = 0; j < cols; j++)
+        {
+            printf("%s::",dataset[i].feature[j].value);
+        }
+        printf("\n");
+    }
+}

@@ -3,7 +3,7 @@ orange;hexagonal;petit;uniforme
 orange;octogonal;petit;rayé
 magenta;hexagonal;gigantesque;rayé
 cyan;hexagonal;gigantesque;rayé
-orange;octagonal;grand;uniforme
+orange;octogonal;grand;uniforme
 magenta;pentagonal;gigantesque;rayé
 magenta;octogonal;grand;rayé
 magenta;octogonal;petit;rayé
