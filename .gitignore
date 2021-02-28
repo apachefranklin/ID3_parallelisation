@@ -1,4 +1,6 @@
 # Build and Release Folders
+main
+Output/output_tree.xml
 bin-debug/
 bin-release/
 [Oo]bj/
