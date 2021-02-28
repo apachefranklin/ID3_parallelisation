@@ -1,0 +1,1 @@
+ gcc -o main ./Header/*.h ./Source/*.c main.c -lm  && ./main 

@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
+
 #define STRUCTURE_H_INCLUDED
 
 /**
