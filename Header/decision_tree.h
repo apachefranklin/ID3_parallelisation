@@ -6,7 +6,6 @@
 
 #define DECISION_TREE_H_INCLUDED
 
-
 /**
  * Cette fonction va calculer le gain d'informaion de chaque 
  * colone du dataset et ensuite 
@@ -16,8 +15,7 @@
  * @param int nb_cols  est le nombre de colonnes de cols_to_avoid
  * @return indice_best_gain
 */
-int findBestSplit(Dataset *dataset,int cols_to_avoid[],int nb_cols);
-
+int findBestSplit(Dataset *dataset, int cols_to_avoid[], int nb_cols);
 
 /**
  * Cette fonction prend en parametre un dataset 
@@ -29,16 +27,20 @@ int findBestSplit(Dataset *dataset,int cols_to_avoid[],int nb_cols);
 */
 int stoppingCriteria(Dataset *dataset);
 
-void inMemomeryBuild(Node *noeud,Dataset *dataset,int cols_to_avoid[],int nb_cols);
-
+void inMemomeryBuild(Node *noeud, Dataset *dataset, int cols_to_avoid[], int nb_cols);
 
 /**
- * Cette fonction prend en parametre 
- * un dataset sans targets et retourne 
- * un datasets avec des targets
- * @param Dataset *dataset with empty targets
- * @return Dataset with full target
+ * this function predicts the tagret of a given feature,
+ * using the Tree rooted in node.
+ * @param Node root node of an aborescence 
+ * @param  Mystring * feature: the feature line.
+ * @param attr_names *  name of attributes
+ * @param n_attr
+ * @return Mysting * the predicted target
 */
-Dataset *findPrediction(Dataset *dataset);
+MyString predict_from_feature(Node node, MyString *feature, MyString *attr_names, int n_attr);
 
+Vector predict_from_dataset(Model model, Dataset dst);
+
+Model make_tree_model(Dataset *dataset);
 #endif
