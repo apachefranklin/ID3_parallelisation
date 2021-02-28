@@ -80,6 +80,10 @@ void inMemomeryBuild(Node *noeud, Dataset *dataset, int cols_to_avoid[], int nb_
         stop = stoppingCriteria(dataset_split[i]);
         if (stop == 1)
         {
+            puts("\n--------------------------------------------------------\n");
+            printf("La valeur predit est: %15s\n", dataset_split[i]->targets[0].value);
+            print_dataset(dataset_split[i]);
+            puts("\n--------------------------------------------------------\n");
             /*
                 on decide ici que le noeud fils correspondant
                 a i est une prediction et son nom va etre le target
@@ -162,4 +166,83 @@ void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, 
         fputs(getTabulation(decalage), outputfile);
         fputs("</node>", outputfile);
     }
+}
+MyString predict_from_feature(Node noeud, MyString *line, MyString *att_rnames, int n_attr)
+{
+    MyString pred_target;
+
+    if (noeud.prediction == 1)
+    {
+        strcpy(pred_target.value, noeud.name);
+        puts("matched\n");
+    }
+    else
+    {
+        int col = 0;
+
+        //find the attribute index in the dataset
+        while (col < n_attr && strcmp(att_rnames[col].value, noeud.name) != 0)
+        {
+            col++;
+        }
+        if (col >= n_attr)
+        {
+            printf("error! cannot find the attribute «%s» in the given row\n", noeud.name);
+            exit(EXIT_FAILURE);
+        }
+
+        //find the corresponding branch
+        int j = 0;
+        while (j < noeud.length && strcmp(noeud.branches[j].value, line[col].value) != 0)
+            j++;
+
+        if (j >= noeud.length)
+        {
+            printf("error! No branch was found!\n");
+            exit(EXIT_FAILURE);
+        }
+        printf("\t %15s : %15s\n", noeud.name, noeud.branches[j].value);
+
+        pred_target = predict_from_feature(noeud.fils[j], line, att_rnames, n_attr);
+    }
+    return pred_target;
+}
+
+Vector predict_from_dataset(Model model, Dataset dst)
+{
+    Vector pred_targets;
+    MyString pred;
+    pred_targets.values = malloc(dst.rows * sizeof(*pred_targets.values));
+    pred_targets.length = dst.rows;
+
+    printf("%15s%15s", "", "PREDICTION\n");
+    for (int i = 0; i < dst.rows; i++)
+    {
+        pred = predict_from_feature(model.root_node, dst.features[i].feature, dst.colnames, dst.cols);
+        strcpy(pred_targets.values[i].value, pred.value);
+        printf("%d »» expect: %15s obtained: %15s\n", i, dst.targets[i].value, pred.value);
+    }
+    printf("%15s%15s", "", "END PREDICTION\n");
+
+    pred_targets;
+}
+
+Model make_tree_model(Dataset *dataset)
+{
+    Model tree;
+    tree.attributes = malloc(dataset->cols * sizeof(MyString *));
+    tree.n_attributes = dataset->cols;
+
+    int cols_to_avoid[dataset->cols];
+    for (int i = 0; i < dataset->cols; i++)
+    {
+        strcpy(tree.attributes[i].value, dataset->colnames->value);
+        cols_to_avoid[i] = -1;
+    }
+
+    Node *noeud = (Node *)malloc(sizeof(*noeud));
+    inMemomeryBuild(noeud, dataset, cols_to_avoid, dataset->cols);
+
+    tree.root_node = *noeud;
+    return tree;
 }

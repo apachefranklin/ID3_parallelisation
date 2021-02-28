@@ -16,6 +16,18 @@ struct MyString
  * on peut avoir nom prenom age 
  * representer par 1 nom prenom age 
 **/
+typedef struct Vector Vector;
+struct Vector
+{
+    MyString *values;
+    int length;
+};
+
+/**
+ * Structure definissant une ligne de notre jeu de donnees
+ * on peut avoir nom prenom age 
+ * representer par 1 nom prenom age 
+**/
 typedef struct Feature Feature;
 struct Feature
 {
@@ -64,8 +76,18 @@ struct Node
  * cette structure represente l'arbre
  * de decision qui sera construit du noeud racine
 */
+
 typedef struct Tree Tree;
 struct Tree
 {
     Node root;
+};
+
+typedef struct Model Model;
+struct Model
+{
+    Node root_node;
+    int n_attributes;
+    MyString *attributes;
+    double score;
 };

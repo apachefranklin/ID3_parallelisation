@@ -167,7 +167,7 @@ Dataset *dataset_col_and_val(Dataset *dataset, int col_index, char val[])
     //on recupere le nombre de fois que l'element viens dans la colonne
     printf("\n---Before malloc---- nb_unique=%d\n", nb_unique);
     Feature *_features = (Feature *)malloc(nb_unique * sizeof(*_features));
-
+    MyString *_targets = (MyString *)malloc(nb_unique * sizeof(*_targets));
     //toreturn->features=_features;
     int rows = dataset->rows;
     int j = 0;
@@ -177,6 +177,7 @@ Dataset *dataset_col_and_val(Dataset *dataset, int col_index, char val[])
         if (strcmp(dataset->features[i].feature[col_index].value, val) == 0)
         {
             _features[j] = dataset->features[i];
+            strcpy(_targets[j].value, dataset->targets[i].value);
             j++;
         }
     }
@@ -184,7 +185,7 @@ Dataset *dataset_col_and_val(Dataset *dataset, int col_index, char val[])
     toreturn->rows = nb_unique;
     toreturn->features = _features;
     toreturn->colnames = dataset->colnames;
-    toreturn->targets = dataset->targets;
+    toreturn->targets = _targets;
     toreturn->cols = dataset->cols;
 
     return toreturn;
