@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
+
 #define STRUCTURE_H_INCLUDED
 
 /**
@@ -7,60 +6,88 @@
  * value represente sa valeur
 */
 typedef struct MyString MyString;
-struct MyString{
+struct MyString
+{
     char value[100];
 };
-
 
 /**
  * Structure definissant une ligne de notre jeu de donnees
  * on peut avoir nom prenom age 
  * representer par 1 nom prenom age 
 **/
-typedef struct FeatureLine FeatureLine;
-struct FeatureLine{
+typedef struct Vector Vector;
+struct Vector
+{
+    MyString *values;
+    int length;
+};
+
+/**
+ * Structure definissant une ligne de notre jeu de donnees
+ * on peut avoir nom prenom age 
+ * representer par 1 nom prenom age 
+**/
+typedef struct Feature Feature;
+struct Feature
+{
     MyString *feature;
     int id;
 };
 
-
 /**
- * Cette struture represente la branche d'un arbre
- * Ici nous devons connaitre le contenu d'une branche
+ * Cette structure permet de representer
+ * soit tout soit une partir de notre 
+ * jeu de donnée
+ * @property Feature *features
+ * @property MyString *colnames
+ * @property Mystring *targets
+ * @property int rows
+ * @property int nbcols
+ * @param param features,colnames,targets,rows,cols;
 */
-typedef struct Branche Branche;
-struct Branche
+typedef struct Dataset Dataset;
+struct Dataset
 {
-    char name[100]; 
-    /*
-        name represente le nom de la branche c'est grace a lui, 
-        qu'on saura la decision
-        a prendre
-        Il est en fait la valeur d'un attribut
-    */
-   int prediction; //cette variable est utiliser dans le cas ou nous avons a faire a une prediction
+    Feature *features;
+    MyString *colnames;
+    MyString *targets;
+    int rows;
+    int cols;
 };
 
 /**
  * Cette structure represente un noeud
  * de l'arbre de decision
 */
-typedef struct Noeud Noeud;
-struct Noeud
+typedef struct Node Node;
+struct Node
 {
     char name[100];
-    int prediction; 
+    int prediction;
+    int length; //represente le nombre de branches ainsi que de fils
     //cette valeur a -1 signifie que nous avons encore des datas restant a predire
-    Branche *branches; 
+    MyString *branches;
     //represente les branches possibles
-    Noeud *fils;
+    Node *fils;
 };
 
 /**
  * cette structure represente l'arbre
  * de decision qui sera construit du noeud racine
 */
+
 typedef struct Tree Tree;
-struct Tree{
-    Noeud racine;
+struct Tree
+{
+    Node root;
+};
+
+typedef struct Model Model;
+struct Model
+{
+    Node root_node;
+    int n_attributes;
+    MyString *attributes;
+    double score;
 };
