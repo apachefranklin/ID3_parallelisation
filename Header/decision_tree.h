@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #ifndef DECISION_TREE_H_INCLUDED
 
 #ifndef STRUCTURE_H_INCLUDED
@@ -41,4 +43,16 @@ void inMemomeryBuild(Node *noeud,Dataset *dataset,int cols_to_avoid[],int nb_col
 */
 Dataset *findPrediction(Dataset *dataset);
 
+
+/**
+ * Cette fonction prend un noeud et ressort sa description
+ * Dans un fichier texte
+ * Le but ici est de pouvoir reconstruire l'arbre de decision obtenu en faisant
+ * une description soit dans un fichier txt soit dans fichier xml
+ * @param Node:Noeud
+ * @param FIlE *outputfile un pointeur vers le fichier  de sorties
+ * @param int decalage est la variable qui permet de connaitre les indentensions qu'ils faut inserer
+ * @return description.txt ou description.xml
+*/
+void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, int branche_index, int if_root, int decalage);
 #endif

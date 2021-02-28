@@ -6,10 +6,10 @@
  * value represente sa valeur
 */
 typedef struct MyString MyString;
-struct MyString{
+struct MyString
+{
     char value[100];
 };
-
 
 /**
  * Structure definissant une ligne de notre jeu de donnees
@@ -17,7 +17,8 @@ struct MyString{
  * representer par 1 nom prenom age 
 **/
 typedef struct Feature Feature;
-struct Feature{
+struct Feature
+{
     MyString *feature;
     int id;
 };
@@ -54,7 +55,7 @@ struct Node
     int prediction;
     int length; //represente le nombre de branches ainsi que de fils
     //cette valeur a -1 signifie que nous avons encore des datas restant a predire
-    MyString *branches; 
+    MyString *branches;
     //represente les branches possibles
     Node *fils;
 };
@@ -64,6 +65,7 @@ struct Node
  * de decision qui sera construit du noeud racine
 */
 typedef struct Tree Tree;
-struct Tree{
+struct Tree
+{
     Node root;
 };

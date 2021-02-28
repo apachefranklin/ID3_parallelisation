@@ -49,5 +49,9 @@ int main(){
     int cols_to_avoid[cols];
     for(int i=0;i<cols;i++) cols_to_avoid[i]=-1;
     inMemomeryBuild(noeud,&dataset,cols_to_avoid,cols);
+
+    FILE *outputtree=fopen("Output/output_tree.xml","w");
+    decisionTreeDescription(noeud,outputtree,"",0,1,0);
+    fclose(outputtree);
     return 0;
 }

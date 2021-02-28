@@ -1,0 +1,19 @@
+<node name='forme' prediction='0' frombranch='' index='0'>
+	<son>
+		<node name='couleur' prediction='0' frombranch='octogonal' index='0'>
+			<son>
+				<node name='comestible' prediction='1' frombranch='cyan' index='0'></node>
+				<node name='comestible' prediction='1' frombranch='orange' index='1'></node>
+				<node name='comestible' prediction='1' frombranch='magenta' index='2'></node>
+			</son>
+		</node>
+		<node name='couleur' prediction='0' frombranch='hexagonal' index='1'>
+			<son>
+				<node name='comestible' prediction='1' frombranch='orange' index='0'></node>
+				<node name='comestible' prediction='1' frombranch='magenta' index='1'></node>
+				<node name='comestible' prediction='1' frombranch='cyan' index='2'></node>
+			</son>
+		</node>
+		<node name='comestible' prediction='1' frombranch='pentagonal' index='2'></node>
+	</son>
+</node>

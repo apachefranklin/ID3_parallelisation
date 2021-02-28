@@ -106,5 +106,9 @@ int exist_ini(int nb,int list[],int size);
 */
 int get_indice_max(double table[],int size);
 
-
+/**
+ * Retourne une chaine contenant le nombre de tabulation passe
+ * en parametre
+*/
+char *getTabulation(int nb);
 #endif

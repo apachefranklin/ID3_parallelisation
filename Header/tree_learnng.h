@@ -33,3 +33,7 @@ Here is the main header. it must be included at once in all c files
 #ifndef UTILITY_H_INCLUDED
 #include "./utility.h"
 #endif
+
+#ifndef PARALLEL_DECISION_TREE_H_INCLUDED
+#include "./parallel_decision_tree.h"
+#endif
