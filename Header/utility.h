@@ -111,4 +111,11 @@ int get_indice_max(double table[],int size);
  * en parametre
 */
 char *getTabulation(int nb);
+
+
+/**
+ * Cette fonction prend deux entier en paramettre et retourne le nombre de threads
+ * Necessaire pour faire un split du premier en fonction du second
+*/
+int get_good_nb_threads(int size,int length_portion);
 #endif

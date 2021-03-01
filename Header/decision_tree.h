@@ -56,4 +56,13 @@ Vector predict_from_dataset(Model model, Dataset dst);
 */
 void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, int branche_index, int if_root, int decalage);
 Model make_tree_model(Dataset *dataset);
+
+/**
+ * Cette fonction construit l'abre de decision en suivant le modele planet
+ * elle prend un grand dataset en parametre et construit l'abre
+ * @param Dataset *dataset
+ * @return model
+*/
+Model make_parallel_tree_model(Dataset *dataset);
+
 #endif

@@ -1,5 +1,5 @@
-
 #define STRUCTURE_H_INCLUDED
+#define OUT_OF_MEMORY_LENGTH 50
 
 /**
  * Ceci repersente une abstraction d'une chaine de caractere
@@ -54,6 +54,7 @@ struct Dataset
     MyString *targets;
     int rows;
     int cols;
+    int real_size; //le dataset peut etre un sous dataset, dans ce cas real_size represente la taille relle de ce dataset
 };
 
 /**
@@ -112,12 +113,11 @@ typedef struct MapOutput
 typedef struct MapperArg
 {
     int id_map;
-    Dataset dataset;
+    Dataset *dataset;
     int *cols; // col indexes to be considered
     int ncol;  //lengh of col indexes
     int *rows; //
     int nrow;
-
     MapOutput *output; // set of key value pair to compute
     int npair;         //number of key value paris
 } MapperArg;

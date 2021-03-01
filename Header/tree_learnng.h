@@ -9,6 +9,7 @@ Here is the main header. it must be included at once in all c files
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <pthread.h>
 
 
 #ifndef STRUCTURE_H_INCLUDED
@@ -36,4 +37,8 @@ Here is the main header. it must be included at once in all c files
 
 #ifndef PARALLEL_DECISION_TREE_H_INCLUDED
 #include "./parallel_decision_tree.h"
+#endif
+
+#ifndef MAP_REDUCE_H_INCLUDED
+#include "./map_reduce.h"
 #endif

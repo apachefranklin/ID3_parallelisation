@@ -20,7 +20,7 @@ int main()
     //mise des headers dans une structure Mystring*
     for (int i = 0; i < cols; i++)
         colnames[i] = _headers[i].feature[0];
-    Dataset dataset = {features, colnames, labels, rows, cols};
+    Dataset dataset = {features, colnames, labels, rows, cols,rows};
     //test de la fonction get_unique by_feature list
     Feature uniques = get_unique_elementF(&dataset, 1);
     printf("\n_____________________________________________\n\n");
@@ -43,7 +43,7 @@ int main()
     printf("\n1_____________________________________________1\n\n");
     print_dataset(testcut);
     printf("\n\n**Entropy test ***\n");
-    double hx = entropy_general(labels, rows);
+    double hx = entropy_general(labels, rows,rows);
     double hx2 = entropy_by_dataset(&dataset);
     printf("entropy = %f\n", hx);
     printf("entropy by dataset = %f\n", hx2);
@@ -68,5 +68,33 @@ int main()
 
     Vector pred_tgts = predict_from_dataset(id3_tree, dataset);
 
+    printf("\n****************************\n");
+    printf("Out of memory=%d\n\n\n",OUT_OF_MEMORY_LENGTH);
+    print_dataset(&dataset);
+    
+    int number=7;
+    MapperArg *mappargs=createTreeMapperArgs(&dataset,number);
+    int nbtimes=get_good_nb_threads(dataset.real_size,number);
+    
+    MapperArg *gthy=&mappargs[0];
+    int *colsfg=(int*)malloc(sizeof(dataset.cols*sizeof(*colsfg)));
+    
+    gthy->cols=colsfg;
+        printf("\n\nbonjour\n\n");
+
+    for(int i=0;i<dataset.cols;i++){
+        gthy->cols[i]=i;
+    }
+    MapperArg *gthy2=&mappargs[1];
+    gthy2->cols=gthy->cols;
+    //print_dataset(gthy->dataset);
+    map_id3(gthy);
+    map_id3(gthy2);
+     hx = entropy_general(labels, rows,rows);
+     hx2 = entropy_by_dataset(&dataset);
+     double gain=information_gain(hx2,&dataset,0);
+     double gain2=entropy_by_dataset(gthy2->dataset);
+     printf("\nLe gain d'information de la colonne est %d\n\n",gthy->dataset->real_size);
+     //print_dataset(gthy2->dataset);
     return 0;
 }

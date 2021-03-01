@@ -112,34 +112,8 @@ void inMemomeryBuild(Node *noeud, Dataset *dataset, int cols_to_avoid[], int nb_
             inMemomeryBuild(&(noeud->fils[i]), dataset_split[i], to_ingore, nb_cols);
         }
     }
-
-    /*
-    for(int i=0;i<nbuniques;i++){
-        stop=stoppingCriteria(dataset_split[i]);
-        printf("---->\nPour la valeur la valeur %s le stopping criteria ",uniques.feature[i].value);
-        if(stop==1){
-            
-                on decide ici que le noeud fils correspondant
-                a i est une prediction et son nom va etre le target
-                de notre arbre 
-            
-           strcpy(noeud->fils[i].name,dataset_split[i]->targets[0].value);
-           noeud->fils[i].prediction=1; //ce noeud est une prediction
-            printf("est respecté\n");
-        }
-        else {printf("n'est pas respecté\n");}
-        print_dataset(dataset_split[i]);
-    }
-    //maintenant que nous avons les datasets pour chaque valeur de la meilleure colonne
-    */
 }
 
-Dataset *findPrediction(Dataset *datatset)
-{
-    Dataset *_dataset = (Dataset *)malloc(sizeof(*_dataset));
-
-    return _dataset;
-}
 
 void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, int branche_index, int if_root, int decalage)
 {
@@ -167,6 +141,7 @@ void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, 
         fputs("</node>", outputfile);
     }
 }
+
 MyString predict_from_feature(Node noeud, MyString *line, MyString *att_rnames, int n_attr)
 {
     MyString pred_target;
@@ -245,4 +220,11 @@ Model make_tree_model(Dataset *dataset)
 
     tree.root_node = *noeud;
     return tree;
+}
+
+
+Model make_parallel_tree_model(Dataset *dataset){
+    Model tree;
+
+
 }
