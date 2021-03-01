@@ -44,7 +44,6 @@ MyString predict_from_feature(Node node, MyString *feature, MyString *attr_names
 
 Vector predict_from_dataset(Model model, Dataset dst);
 
-
 /**
  * Cette fonction prend un noeud et ressort sa description
  * Dans un fichier texte
