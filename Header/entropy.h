@@ -29,6 +29,7 @@ double entropy_by_dataset(Dataset *dataset);
 
 
 /**
+ * Cette est fonction l'equivalente Hxaj=v dans le calcul de l'entropy
  * Cette fonction prend en entre une liste de feature
  * un index de column et une valeur de cette column ensuite
  * Calul l'entropy de cet echantillon et retourne une liste de nombre
