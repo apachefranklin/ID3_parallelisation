@@ -146,7 +146,7 @@ void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, 
     //on commence d'abord par ecrire les decalages dans le fichier
     fputs(getTabulation(decalage), outputfile);
     //maintenant nous devons ecrire le noeud et ses attributs
-    fprintf(outputfile,"<node name='%s' prediction='%d' frombranch='%s' index='%d'>",noeud->name,noeud->prediction,branche_name,branche_index);
+    fprintf(outputfile, "<node name='%s' prediction='%d' frombranch='%s' index='%d'>", noeud->name, noeud->prediction, branche_name, branche_index);
     //maintenant nous devons ecrire les branches
     if (noeud->prediction == 1)
     {
@@ -154,12 +154,12 @@ void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, 
     }
     else
     {
-        fprintf(outputfile,"\n%s<son>\n",getTabulation(decalage+1));
+        fprintf(outputfile, "\n%s<son>\n", getTabulation(decalage + 1));
         for (int i = 0; i < noeud->length; i++)
         {
             //on insere le nombre d'element necessaire pour faire un bon decalage
             fputs(getTabulation(decalage + 1), outputfile);
-            decisionTreeDescription(&(noeud->fils[i]), outputfile, noeud->branches[i].value,i,0,decalage + 1);
+            decisionTreeDescription(&(noeud->fils[i]), outputfile, noeud->branches[i].value, i, 0, decalage + 1);
         }
         fputs(getTabulation(decalage + 1), outputfile);
         fputs("</son>\n", outputfile);
@@ -220,7 +220,7 @@ Vector predict_from_dataset(Model model, Dataset dst)
     {
         pred = predict_from_feature(model.root_node, dst.features[i].feature, dst.colnames, dst.cols);
         strcpy(pred_targets.values[i].value, pred.value);
-        printf("%d »» expect: %15s obtained: %15s\n", i, dst.targets[i].value, pred.value);
+        printf("%d »» expected: %15s\t obtained: %15s\n", i, dst.targets[i].value, pred.value);
     }
     printf("%15s%15s", "", "END PREDICTION\n");
 

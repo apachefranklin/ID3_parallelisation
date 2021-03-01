@@ -91,3 +91,59 @@ struct Model
     MyString *attributes;
     double score;
 };
+
+//////*STRUCTURE POUR MAP REDUCE*//////
+
+/*
+*usage: MapOuput* contains list of key value pair
+*key is the attribute name
+*value is the gain computed by the mapper.
+* 
+*/
+typedef struct MapOutput
+{
+    MyString key;
+    double value;
+} MapOutput;
+
+/*
+*encapsulates input arguments of a mapper
+*/
+typedef struct MapperArg
+{
+    int id_map;
+    Dataset dataset;
+    int *cols; // col indexes to be considered
+    int ncol;  //lengh of col indexes
+    int *rows; //
+    int nrow;
+
+    MapOutput *output; // set of key value pair to compute
+    int npair;         //number of key value paris
+} MapperArg;
+
+/*
+*Usage: ShufleOutput* a list of grouped key-value  pairs
+*key is a colname attribute
+*values is the list of gains computed by each mapper.
+*/
+typedef struct ShufleOutput
+{
+    MyString key;
+    double *values;
+    int length;
+} ShufleOutput;
+
+/*
+* when a reducer ends it job, it modifies, ReducerArg.key
+* and ReducerArg.gain. 
+* so &ReducerArg must be taken as reducer parameter.
+*/
+typedef struct ReducerArg
+{
+    int id_reducer;
+    ShufleOutput input; // the shufle output
+    MyString key;       //output: the col name attribute that maximize the gain
+    double gain;        //output: the max gain.
+
+} ReducerArg;

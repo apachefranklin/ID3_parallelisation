@@ -49,17 +49,20 @@ int main()
     printf("entropy by dataset = %f\n", hx2);
 
     printf("\n\n**** Maintenant nous passons a la construction de l'arbre *** \n\n");
-    
-    Node *noeud=(Node*)malloc(sizeof(*noeud));
-    int cols_to_avoid[cols];
-    for(int i=0;i<cols;i++) cols_to_avoid[i]=-1;
-    inMemomeryBuild(noeud,&dataset,cols_to_avoid,cols);
 
-    FILE *outputtree=fopen("Output/output_tree.xml","w");
-    decisionTreeDescription(noeud,outputtree,"",0,1,0);
-    fclose(outputtree);
+    // Node *noeud = (Node *)malloc(sizeof(*noeud));
+    // int cols_to_avoid[cols];
+    // for (int i = 0; i < cols; i++)
+    //     cols_to_avoid[i] = -1;
 
     Model id3_tree = make_tree_model(&dataset);
+
+    //inMemomeryBuild(noeud, &dataset, cols_to_avoid, cols);
+
+    FILE *outputtree = fopen("Output/output_tree3.xml", "w");
+    decisionTreeDescription(&(id3_tree.root_node), outputtree, "", 0, 1, 0);
+    fclose(outputtree);
+
     //MyString pred1 = predict_from_feature(id3_tree.root_node, dataset.features[1].feature, dataset.colnames, dataset.cols);
     //printf("Prediction: %s\n\n", pred1.value);
 
