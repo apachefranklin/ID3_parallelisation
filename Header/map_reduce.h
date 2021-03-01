@@ -15,4 +15,15 @@
 */
 void *reduce(ReducerArg *r_arg);
 
+/*
+* shuefle: the param s_arg must be  passed to merge_map_outputs_from_map_args
+* before using it.
+*
+*/
+void *shuffle(ShufleArg *s_arg);
+
+/*
+* concatenates lists  of mappers output 
+*/
+void *merge_map_outputs_from_map_args(ShufleArg *s_arg);
 #endif

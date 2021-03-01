@@ -139,8 +139,11 @@ typedef struct ShufleOutput
 */
 typedef struct ShufleArg
 {
-    MapOutput *inputs; //set key val returned by reducers
-    int length_inputs;
+    MapperArg *m_args; //mappers argument, whith field
+    int length_m_args;
+
+    MapOutput *m_outputs; //set of intermediate key values computed by Map
+    int length_m_outputs;
 
     ShufleOutput *outputs; // list grouped by key key value to compute
     int length_output;

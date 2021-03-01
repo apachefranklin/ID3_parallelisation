@@ -56,4 +56,6 @@ Vector predict_from_dataset(Model model, Dataset dst);
 */
 void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, int branche_index, int if_root, int decalage);
 Model make_tree_model(Dataset *dataset);
+
+void test_decision_tree();
 #endif
