@@ -135,6 +135,19 @@ typedef struct ShufleOutput
 } ShufleOutput;
 
 /*
+* arguments for the shufle function
+*/
+typedef struct ShufleArg
+{
+    MapOutput *inputs; //set key val returned by reducers
+    int length_inputs;
+
+    ShufleOutput *outputs; // list grouped by key key value to compute
+    int length_output;
+
+} ShufleArg;
+
+/*
 * when a reducer ends it job, it modifies, ReducerArg.key
 * and ReducerArg.gain. 
 * so &ReducerArg must be taken as reducer parameter.
@@ -142,8 +155,9 @@ typedef struct ShufleOutput
 typedef struct ReducerArg
 {
     int id_reducer;
-    ShufleOutput input; // the shufle output
-    MyString key;       //output: the col name attribute that maximize the gain
-    double gain;        //output: the max gain.
+    ShufleOutput *inputs; // the shufle output list
+    int length_inputs;
+    MyString key; //output: the col name attribute that maximize the gain
+    double gain;  //output: the max gain.
 
 } ReducerArg;
