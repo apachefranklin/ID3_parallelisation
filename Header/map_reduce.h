@@ -23,15 +23,7 @@ void* map_id3(void *args);
  */
 MapperArg* createTreeMapperArgs(Dataset *dataset, int out_of_memory);
 
-/**
- * Cette fonction prend en paramettre un dataset trop
- * Grand et construire de facons parallele
- * Et determine de facons parallelle la construction du sous arbre
- * @param Dataset *dataset
- * @param Node *noeud
- * @param int out_of_memory
- */
-void outMemoryBuild(Node *noeud,Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_of_memory);
+
 
 /*
 * Reduce funtion:
@@ -45,7 +37,8 @@ void *reduce(ReducerArg *r_arg);
 /*
 * shuefle: the param s_arg must be  passed to merge_map_outputs_from_map_args
 * before using it.
-*
+* Cette fonction va regrouper les resultats en sommant les differents gains d'informations
+* 
 */
 void *shuffle(ShufleArg *s_arg);
 

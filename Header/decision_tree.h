@@ -19,12 +19,7 @@
 */
 int findBestSplit(Dataset *dataset, int cols_to_avoid[], int nb_cols);
 
-/**
- * Cette fonction permet de calculer le meilleur split
- * D'un dataset de facons distribuer en utilisant le principe 
- * Map reduce
-*/
-int findParallelBestSplit(Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_of_memory);
+
 
 /**
  * Cette fonction prend en parametre un dataset 
@@ -64,13 +59,6 @@ Vector predict_from_dataset(Model model, Dataset dst);
 void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, int branche_index, int if_root, int decalage);
 Model make_tree_model(Dataset *dataset);
 
-/**
- * Cette fonction construit l'abre de decision en suivant le modele planet
- * elle prend un grand dataset en parametre et construit l'abre
- * @param Dataset *dataset
- * @return model
-*/
-Model make_parallel_tree_model(Dataset *dataset);
 
 void test_decision_tree();
 #endif

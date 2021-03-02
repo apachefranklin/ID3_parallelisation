@@ -56,12 +56,19 @@ int main()
     //     cols_to_avoid[i] = -1;
 
     Model id3_tree = make_tree_model(&dataset);
+    int out_of_memory=7;
+    Model parallel_tree=makeParallelTree(&dataset,out_of_memory);
 
     //inMemomeryBuild(noeud, &dataset, cols_to_avoid, cols);
 
     FILE *outputtree = fopen("Output/output_tree3.xml", "w");
-    decisionTreeDescription(&(id3_tree.root_node), outputtree, "", 0, 1, 0);
+        decisionTreeDescription(&(id3_tree.root_node), outputtree, "", 0, 1, 0);
     fclose(outputtree);
+
+    FILE *outputtrees = fopen("Output/output_parallel_tree3.xml", "w");
+        decisionTreeDescription(&(parallel_tree.root_node), outputtrees, "", 0, 1, 0);
+    fclose(outputtrees);
+
 
     //MyString pred1 = predict_from_feature(id3_tree.root_node, dataset.features[1].feature, dataset.colnames, dataset.cols);
     //printf("Prediction: %s\n\n", pred1.value);
@@ -85,7 +92,7 @@ int main()
         printf("\n\nbonjour\n\n");
 
     for(int i=0;i<dataset.cols;i++){
-        gthy->cols_to_avoid[i]=i;
+        gthy->cols_to_avoid[i]=-1;
     }
     MapperArg *gthy2=&mappargs[1];
     gthy2->cols_to_avoid=gthy->cols_to_avoid;
@@ -106,7 +113,7 @@ int main()
      printf("\n\nRecherche avec le parallel best split\n\n");
      printf("\n\n**************************************\n\n");
      int *cols_to_avoid=(int*)malloc(2*sizeof(*cols_to_avoid));
-     //int best=findParallelBestSplit(&dataset,cols_to_avoid,0,number);
-     //printf("The best is there the best %d\n",best);
+     int best=findParallelBestSplit(&dataset,cols_to_avoid,0,number);
+     printf("The best is there the best %d\n",best);
     return 0;
 }
