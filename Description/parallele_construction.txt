@@ -1,0 +1,5 @@
+Pour construire l'arbre de facons paralle:
+     nous nous concentrons sur la recherche du meilleur gain d'information
+     Pour cela quand la taille du jeu de donnes est tres grand, on calcul le nombre de
+     Treed a cree en fonction de la constante outofmemory.
+     Ensuite on fait cree les maps args et a chaque threead on associe un map args

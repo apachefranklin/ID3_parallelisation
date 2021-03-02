@@ -1,1 +1,1 @@
- gcc -o main ./Header/*.h ./Source/*.c main.c -lm  && ./main 
+gcc -o main ./Header/*.h ./Source/*.c -lm -lpthread main.c && ./main

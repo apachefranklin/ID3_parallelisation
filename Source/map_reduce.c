@@ -1,5 +1,5 @@
 #include "../Header/tree_learnng.h"
-
+#include <pthread.h>
 
 
 
@@ -34,14 +34,15 @@ MapperArg* createTreeMapperArgs(Dataset *dataset, int out_of_memory){
         }
         mapsargs[i].dataset->features=_features;
         mapsargs[i].dataset->targets=_targets;
+        mapsargs[i].weigth=((double)out_of_memory)/((double)dataset->rows);
         print_dataset(mapsargs[i].dataset);
     }   
     return mapsargs;
 }
 
-void map_id3(MapperArg *maparg)
+void* map_id3(void *args)
 {
-    
+    MapperArg *maparg=(MapperArg*)args;
     MapOutput *mapout = (MapOutput *)malloc(sizeof(*mapout));
     
     Dataset *dataset = maparg->dataset;
@@ -61,11 +62,34 @@ void map_id3(MapperArg *maparg)
         maparg->output[i].value = -1.0;
         if (exist_ini(i, maparg->cols, cols) == 1)
         {
-            maparg->output[i].value = information_gain(h_x, dataset, i);
+            maparg->output[i].value =(maparg->weigth)*(information_gain(h_x, dataset, i));
             printf("\nPour la colone %s d'indice %d son gain est %f\n",maparg->output[i].key.value,i,maparg->output[i].value);
         }
     }
     printf("\n\n**************________________________**********____________\n\n");
+}
+
+
+
+Model make_parallel_tree_model(Dataset *dataset){
+    
+    Model tree;
+    tree.attributes = malloc(dataset->cols * sizeof(MyString *));
+    tree.n_attributes = dataset->cols;
+
+    int cols_to_avoid[dataset->cols];
+    for (int i = 0; i < dataset->cols; i++)
+    {
+        strcpy(tree.attributes[i].value, dataset->colnames->value);
+        cols_to_avoid[i] = -1;
+    }
+
+    Node *noeud = (Node *)malloc(sizeof(*noeud));
+    inMemomeryBuild(noeud, dataset, cols_to_avoid, dataset->cols);
+
+    tree.root_node = *noeud;
+    return tree;
+
 }
 
 

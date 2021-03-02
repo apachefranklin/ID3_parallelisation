@@ -216,15 +216,93 @@ Model make_tree_model(Dataset *dataset)
     }
 
     Node *noeud = (Node *)malloc(sizeof(*noeud));
+
     inMemomeryBuild(noeud, dataset, cols_to_avoid, dataset->cols);
 
     tree.root_node = *noeud;
     return tree;
 }
 
+int findBestSplitParalllele(Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_fo_memory){
+    return 0;
+}
+void outMemoryBuild(Node *noeud,Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_of_memory){
+    int rows = dataset->rows, cols = dataset->cols;
+    //determination du nombre de threads
+    int nb_threads=get_good_nb_threads(rows,out_of_memory);
+    pthread_t *threads_list=(pthread_t*)malloc(nb_threads*sizeof(*threads_list));
+    int *cols_to_consider=(int*)malloc(nb_cols*sizeof(*cols_to_consider));
+    for(int j=0;j<nb_cols;j++){
+        cols_to_consider[j]=j;
+        if(exist_ini(j,cols_to_avoid,nb_cols)){
+            cols_to_consider[j]=-1;
+        }
+    }
+    //creons les differents mapargs
+    MapperArg *mapargs=createTreeMapperArgs(dataset,out_of_memory);
+    //maintenant que nous avons les differents mappargs
+    //affectons chaqu'un a un threads
+    for (int i=0;i<nb_threads;i++){
+        mapargs[i].cols=cols_to_consider;
+        pthread_create(&threads_list[i],NULL,map_id3,&mapargs[i]);
+    }
+    //une fois ceci fait nous faisons des pthreads join pour attendre que le processus se termine
+    for(int i=0;i<nb_threads;i++){
+        pthread_join(threads_list[i],NULL);
+    }
+    //cette phase terminé passons a l'etape du shuffle
+    int best_col=0;
+    MyString *colnames = dataset->colnames;
+    MyString *targets = dataset->targets;
+    //int best_col = findBestSplit(dataset, cols_to_avoid, nb_cols);
+    Feature uniques = get_unique_elementF(dataset, best_col);
+    int nbuniques = uniques.id;
+    strcpy(noeud->name, colnames[best_col].value);
+    Dataset **dataset_split = (Dataset **)malloc(nbuniques * sizeof(*dataset_split));
+    noeud->branches = (MyString *)malloc(nbuniques * sizeof(*(noeud->branches)));
+    noeud->fils = (Node *)malloc(nbuniques * sizeof(*(noeud->fils)));
+    noeud->length = nbuniques;
 
-Model make_parallel_tree_model(Dataset *dataset){
-    Model tree;
+    printf("\n\nLa meilleur colone *%s* contient *%d* nombres d'elt unique \n", colnames[best_col].value, uniques.id);
+    int stop = 0;
+    for (int i = 0; i < nbuniques; i++)
+    {
+        dataset_split[i] = dataset_col_and_val(dataset, best_col, uniques.feature[i].value);
+        strcpy(noeud->branches[i].value, uniques.feature[i].value);
+        noeud->fils[i].prediction = 0;
+        stop = stoppingCriteria(dataset_split[i]);
+        if (stop == 1)
+        {
+            puts("\n--------------------------------------------------------\n");
+            printf("La valeur predit est: %15s\n", dataset_split[i]->targets[0].value);
+            print_dataset(dataset_split[i]);
+            puts("\n--------------------------------------------------------\n");
+            /*
+                on decide ici que le noeud fils correspondant
+                a i est une prediction et son nom va etre le target
+                de notre arbre 
+            */
+            strcpy(noeud->fils[i].name, dataset_split[i]->targets[0].value);
+            noeud->fils[i].prediction = 1; //ce noeud est une prediction
+        }
+        else
+        {
+            /**
+             *  Maintenant que cette variable offre encore des choix de decision
+             * nous devons creer une sous liste des colonnes a ne pas exploite pour 
+             * cette sous section en y ajoutant la colonne best_col
+             */
+            int to_ingore[cols];
+            for (int k = 0; k < cols; k++)
+            {
+                to_ingore[k] = cols_to_avoid[k];
+                if (k == best_col)
+                {
+                    to_ingore[k] = best_col;
+                }
+            }
 
-
+            inMemomeryBuild(&(noeud->fils[i]), dataset_split[i], to_ingore, nb_cols);
+        }
+    }
 }

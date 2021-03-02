@@ -19,6 +19,8 @@
 */
 int findBestSplit(Dataset *dataset, int cols_to_avoid[], int nb_cols);
 
+int findBestSplitParalllele(Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_fo_memory);
+
 /**
  * Cette fonction prend en parametre un dataset 
  * et verifie s'il est compatible a yn crictere d'arret ou bien

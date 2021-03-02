@@ -5,5 +5,4 @@ That is academic of id3 algorithm for decision tree construction in c language
 # How to run
 
 Actualy, you can run test with the command 
-**gcc decision_tree.c -o decision_tree.run -lm**
-after run command **./decision_tree.run**
+**gcc -o main ./Header/\*.h ./Source/\*.c -lm -lpthread main.c && ./main**
