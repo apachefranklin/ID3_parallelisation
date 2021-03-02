@@ -11,7 +11,7 @@ double entropy_general(MyString *y,int y_size,int real_size)
     {
         strcpy(temp, uniquesd.feature[i].value);
         nb_times = (double)nb_times_in(temp, y, y_size);
-        frequence = nb_times / real_size;
+        frequence = nb_times / y_size;
         frequence = -(frequence * log2(frequence));
         entropy += frequence;
     }
