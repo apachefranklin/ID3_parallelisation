@@ -8,10 +8,7 @@ bin-release/
 
 # Other files and folders
 .settings/
-
-# Executables
-*.swf
-*.air
+main
 *.ipa
 *.apk
 *.py
