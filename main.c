@@ -67,6 +67,8 @@ int main()
     //printf("Prediction: %s\n\n", pred1.value);
 
     Vector pred_tgts = predict_from_dataset(id3_tree, dataset);
+    //test_decision_tree();
+    //test_parallel_decision_tree();
 
     printf("\n****************************\n");
     printf("Out of memory=%d\n\n\n",OUT_OF_MEMORY_LENGTH);
@@ -96,5 +98,11 @@ int main()
      double gain2=entropy_by_dataset(gthy2->dataset);
      printf("\nLe gain d'information de la colonne est %d\n\n",gthy->dataset->real_size);
      //print_dataset(gthy2->dataset);
+
+     printf("\n\nRecherche avec le parallel best split\n\n");
+     printf("\n\n**************************************\n\n");
+     int *cols_to_avoid=(int*)malloc(2*sizeof(*cols_to_avoid));
+     int best=findParallelBestSplit(&dataset,cols_to_avoid,0,number);
+     printf("The best is there the best %d\n",best);
     return 0;
 }

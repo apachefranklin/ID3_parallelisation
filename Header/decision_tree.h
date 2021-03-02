@@ -19,7 +19,12 @@
 */
 int findBestSplit(Dataset *dataset, int cols_to_avoid[], int nb_cols);
 
-int findBestSplitParalllele(Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_fo_memory);
+/**
+ * Cette fonction permet de calculer le meilleur split
+ * D'un dataset de facons distribuer en utilisant le principe 
+ * Map reduce
+*/
+int findParallelBestSplit(Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_of_memory);
 
 /**
  * Cette fonction prend en parametre un dataset 
@@ -67,4 +72,5 @@ Model make_tree_model(Dataset *dataset);
 */
 Model make_parallel_tree_model(Dataset *dataset);
 
+void test_decision_tree();
 #endif

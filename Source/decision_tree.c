@@ -223,10 +223,7 @@ Model make_tree_model(Dataset *dataset)
     return tree;
 }
 
-int findBestSplitParalllele(Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_fo_memory){
-    return 0;
-}
-void outMemoryBuild(Node *noeud,Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_of_memory){
+int findParallelBestSplit(Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_of_memory){
     int rows = dataset->rows, cols = dataset->cols;
     //determination du nombre de threads
     int nb_threads=get_good_nb_threads(rows,out_of_memory);
@@ -250,7 +247,40 @@ void outMemoryBuild(Node *noeud,Dataset *dataset,int *cols_to_avoid,int nb_cols,
     for(int i=0;i<nb_threads;i++){
         pthread_join(threads_list[i],NULL);
     }
+
     //cette phase terminé passons a l'etape du shuffle
+    //creons d'abord un objet ShuffleArg*
+
+    ShufleArg* shuarg=(ShufleArg*)malloc(sizeof(*shuarg));
+    shuarg->m_args=mapargs;
+    shuarg->length_m_args=nb_threads;
+
+    // ShufleArg s_arg;
+    // s_arg.m_outputs=mapargs[0].output;
+    // s_arg.length_m_outputs=mapargs->npair;
+    // test_parallel_decision_tree(s_arg);
+
+    printf("\nLength of map args is %d\n",shuarg->length_m_args);
+    merge_map_outputs_from_map_args(shuarg);
+
+    printf("\n shuffle\n");
+    shuffle(shuarg);
+    
+    //now we nedd to call reduce
+    ReducerArg *reducearg=(ReducerArg*)malloc(sizeof(*reducearg));
+    reducearg->inputs=shuarg->outputs;
+    reducearg->length_inputs=shuarg->length_output;
+    printf("\nA list of out have %d \n",shuarg->length_output);
+    reduce(reducearg);
+    
+    printf("La meilleur cle est %s et son gain est %f\n",reducearg->key.value,reducearg->gain);
+    return index_in_mystring_list(reducearg->key,dataset->colnames,dataset->cols);
+}
+
+void outMemoryBuild(Node *noeud,Dataset *dataset,int *cols_to_avoid,int nb_cols,int out_of_memory){
+    int rows = dataset->rows, cols = dataset->cols;
+    
+
     int best_col=0;
     MyString *colnames = dataset->colnames;
     MyString *targets = dataset->targets;
@@ -305,4 +335,80 @@ void outMemoryBuild(Node *noeud,Dataset *dataset,int *cols_to_avoid,int nb_cols,
             inMemomeryBuild(&(noeud->fils[i]), dataset_split[i], to_ingore, nb_cols);
         }
     }
+}
+void test_decision_tree()
+{
+    char dataPath[] = "Data/data.txt";
+    char headerPath[] = "Data/header.txt";
+    char labelsPath[] = "Data/label.txt";
+    int *fileInfo = file_information(dataPath, ";");
+    int rows = *(fileInfo + 1), cols = *(fileInfo + 2);
+
+    Feature *features = file_content(dataPath, ";");
+    Feature *_labels = file_content("Data/label.txt", ";");
+    MyString *labels = (MyString *)malloc(rows * sizeof(*labels));
+    Feature *_headers = file_content("Data/header.txt", ";");
+    MyString *colnames = (MyString *)malloc(rows * sizeof(*colnames));
+
+    //mise des labels dans une structure MyString
+    for (int i = 0; i < rows; i++)
+        labels[i] = _labels[i].feature[0];
+    //mise des headers dans une structure Mystring*
+    for (int i = 0; i < cols; i++)
+        colnames[i] = _headers[i].feature[0];
+    Dataset dataset = {features, colnames, labels, rows, cols};
+    //test de la fonction get_unique by_feature list
+    Feature uniques = get_unique_elementF(&dataset, 1);
+    printf("\n_____________________________________________\n\n");
+
+    for (int i = 0; i < uniques.id; i++)
+    {
+        printf("%s :: ", uniques.feature[i].value);
+    }
+
+    int nb_unique2 = nb_times_inF(&dataset, uniques.feature[0].value, 1);
+    Dataset *testcut = dataset_col_and_val(&dataset, 1, uniques.feature[0].value);
+    printf("\n_____________________________________________\n\n");
+    printf("Nb unique = %d\n\n", nb_unique2);
+    for (int i = 0; i < nb_unique2; i++)
+    {
+        for (int j = 0; j < cols; j++)
+            printf("%s::", testcut->features[i].feature[j].value);
+        printf("\n\n");
+    }
+    printf("\n1_____________________________________________1\n\n");
+    print_dataset(testcut);
+    printf("\n\n**Entropy test ***\n");
+    double hx = entropy_general(labels, rows,rows);
+    double hx2 = entropy_by_dataset(&dataset);
+    printf("entropy = %f\n", hx);
+    printf("entropy by dataset = %f\n", hx2);
+
+    printf("\n\n**** Maintenant nous passons a la construction de l'arbre *** \n\n");
+
+    // Node *noeud = (Node *)malloc(sizeof(*noeud));
+    // int cols_to_avoid[cols];
+    // for (int i = 0; i < cols; i++)
+    //     cols_to_avoid[i] = -1;
+
+    Model id3_tree = make_tree_model(&dataset);
+
+    //inMemomeryBuild(noeud, &dataset, cols_to_avoid, cols);
+
+    FILE *outputtree = fopen("Output/output_tree3.xml", "w");
+    decisionTreeDescription(&(id3_tree.root_node), outputtree, "", 0, 1, 0);
+    fclose(outputtree);
+
+    //MyString pred1 = predict_from_feature(id3_tree.root_node, dataset.features[1].feature, dataset.colnames, dataset.cols);
+    //printf("Prediction: %s\n\n", pred1.value);
+
+    Vector pred_tgts = predict_from_dataset(id3_tree, dataset);
+
+    free(features);
+    free(_labels);
+    free(labels);
+    free(_headers);
+    free(colnames);
+    free(fileInfo);
+    free(testcut);
 }

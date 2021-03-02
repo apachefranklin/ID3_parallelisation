@@ -6,6 +6,12 @@
 
 #define UTILITY_H_INCLUDED
 
+/**
+ * Cette fonction prend un Mystring en parametre et une liste de 
+ * MyString ensuite retourne -1 si le premier n'est pas trouve et 
+ * retourne son indice dans la liste si elle est trouv
+ */
+int index_in_mystring_list(MyString mstring,MyString list[],int size);
 
 /**
  * Prend une liste de feature en parametre et renvoies 

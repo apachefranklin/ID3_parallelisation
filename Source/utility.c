@@ -274,3 +274,13 @@ int get_good_nb_threads(int size,int length_portion){
     }
     return nb_times;
 }
+
+int index_in_mystring_list(MyString mstring,MyString list[],int size){
+    int index=-1;
+    for(int i=0;i<size,index<0;i++){
+        if(strcmp(mstring.value,list[i].value)==0){
+            index=i;
+        }
+    }
+    return index;
+}
