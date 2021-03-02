@@ -4,7 +4,7 @@
 
 
 MapperArg* createTreeMapperArgs(Dataset *dataset, int out_of_memory){
-    int size=dataset->real_size;
+    int size=dataset->rows;
     int nb_times=get_good_nb_threads(size,out_of_memory);
     
     MapperArg *mapsargs=(MapperArg*)malloc(nb_times*sizeof(*mapsargs));
@@ -59,7 +59,8 @@ void* map_id3(void *args)
     for (int i = 0; i < dataset->cols; i++)
     {
         strcpy(maparg->output[i].key.value, dataset->colnames[i].value);
-        maparg->output[i].value = -1.0;
+        maparg->output[i].value = 0.0;
+        printf("***Construction du map %i\n",i);
         if (exist_ini(i, maparg->cols, cols) == 1)
         {
             maparg->output[i].value =(maparg->weigth)*(information_gain(h_x, dataset, i));

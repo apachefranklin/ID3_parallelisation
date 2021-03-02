@@ -248,6 +248,14 @@ int findParallelBestSplit(Dataset *dataset,int *cols_to_avoid,int nb_cols,int ou
         pthread_join(threads_list[i],NULL);
     }
 
+   /*  for(int i=0;i<nb_threads;i++){
+        printf("\n In maparg %i we have the following gain \n-------------\n",i);
+        for (int j=0;j<mapargs[i].cols;j++){
+            printf("Le gain de la colone %s est %f\n",mapargs[i].output[j].key.value,mapargs[i].output[j].value);
+        }
+        printf("\n In we have the following gain \n-------------\n");
+    } */
+
     //cette phase terminé passons a l'etape du shuffle
     //creons d'abord un objet ShuffleArg*
 
@@ -272,7 +280,7 @@ int findParallelBestSplit(Dataset *dataset,int *cols_to_avoid,int nb_cols,int ou
     reducearg->length_inputs=shuarg->length_output;
     printf("\nA list of out have %d \n",shuarg->length_output);
     reduce(reducearg);
-    
+
     printf("La meilleur cle est %s et son gain est %f\n",reducearg->key.value,reducearg->gain);
     return index_in_mystring_list(reducearg->key,dataset->colnames,dataset->cols);
 }
