@@ -19,6 +19,8 @@
 */
 int findBestSplit(Dataset *dataset, int cols_to_avoid[], int nb_cols);
 
+
+
 /**
  * Cette fonction prend en parametre un dataset 
  * et verifie s'il est compatible a yn crictere d'arret ou bien
@@ -44,7 +46,6 @@ MyString predict_from_feature(Node node, MyString *feature, MyString *attr_names
 
 Vector predict_from_dataset(Model model, Dataset dst);
 
-
 /**
  * Cette fonction prend un noeud et ressort sa description
  * Dans un fichier texte
@@ -57,4 +58,7 @@ Vector predict_from_dataset(Model model, Dataset dst);
 */
 void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, int branche_index, int if_root, int decalage);
 Model make_tree_model(Dataset *dataset);
+
+
+void test_decision_tree();
 #endif

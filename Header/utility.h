@@ -6,6 +6,12 @@
 
 #define UTILITY_H_INCLUDED
 
+/**
+ * Cette fonction prend un Mystring en parametre et une liste de 
+ * MyString ensuite retourne -1 si le premier n'est pas trouve et 
+ * retourne son indice dans la liste si elle est trouv
+ */
+int index_in_mystring_list(MyString mstring,MyString list[],int size);
 
 /**
  * Prend une liste de feature en parametre et renvoies 
@@ -111,4 +117,11 @@ int get_indice_max(double table[],int size);
  * en parametre
 */
 char *getTabulation(int nb);
+
+
+/**
+ * Cette fonction prend deux entier en paramettre et retourne le nombre de threads
+ * Necessaire pour faire un split du premier en fonction du second
+*/
+int get_good_nb_threads(int size,int length_portion);
 #endif

@@ -1,0 +1,33 @@
+<node name='forme' prediction='0' frombranch='' index='0'>
+	<son>
+		<node name='motif' prediction='0' frombranch='octogonal' index='0'>
+			<son>
+				<node name='comestible' prediction='1' frombranch='uniforme' index='0'></node>
+				<node name='couleur' prediction='0' frombranch='rayé' index='1'>
+					<son>
+						<node name='non_comestible' prediction='1' frombranch='orange' index='0'></node>
+						<node name='taille' prediction='0' frombranch='magenta' index='1'>
+							<son>
+								<node name='non_comestible' prediction='1' frombranch='grand' index='0'></node>
+								<node name='comestible' prediction='1' frombranch='petit' index='1'></node>
+							</son>
+						</node>
+					</son>
+				</node>
+			</son>
+		</node>
+		<node name='couleur' prediction='0' frombranch='hexagonal' index='1'>
+			<son>
+				<node name='comestible' prediction='1' frombranch='orange' index='0'></node>
+				<node name='taille' prediction='0' frombranch='magenta' index='1'>
+					<son>
+						<node name='comestible' prediction='1' frombranch='gigantesque' index='0'></node>
+						<node name='non_comestible' prediction='1' frombranch='grand' index='1'></node>
+					</son>
+				</node>
+				<node name='comestible' prediction='1' frombranch='cyan' index='2'></node>
+			</son>
+		</node>
+		<node name='non_comestible' prediction='1' frombranch='pentagonal' index='2'></node>
+	</son>
+</node>

@@ -1,5 +1,5 @@
-
 #define STRUCTURE_H_INCLUDED
+#define OUT_OF_MEMORY_LENGTH 50
 
 /**
  * Ceci repersente une abstraction d'une chaine de caractere
@@ -54,6 +54,7 @@ struct Dataset
     MyString *targets;
     int rows;
     int cols;
+    int real_size; //le dataset peut etre un sous dataset, dans ce cas real_size represente la taille relle de ce dataset
 };
 
 /**
@@ -91,3 +92,76 @@ struct Model
     MyString *attributes;
     double score;
 };
+
+//////*STRUCTURE POUR MAP REDUCE*//////
+
+/*
+*usage: MapOuput* contains list of key value pair
+*key is the attribute name
+*value is the gain computed by the mapper.
+* 
+*/
+typedef struct MapOutput
+{
+    MyString key;
+    double value;
+} MapOutput;
+
+/*
+*encapsulates input arguments of a mapper
+*/
+typedef struct MapperArg
+{
+    int id_map;
+    Dataset *dataset;
+    int *cols_to_avoid; // col indexes to be avoided
+    double weigth; //represente le poids qu'on va multiplier les entropys et les gains d'information avec
+    int ncol;  //lengh of col indexes
+    int *rows; //
+    int nrow;
+    MapOutput *output; // set of key value pair to compute
+    int npair;         //number of key value paris
+} MapperArg;
+
+/*
+*Usage: ShufleOutput* a list of grouped key-value  pairs
+*key is a colname attribute
+*values is the list of gains computed by each mapper.
+*/
+typedef struct ShufleOutput
+{
+    MyString key;
+    double *values;
+    int length;
+} ShufleOutput;
+
+/**
+ * Cette structure va permettre de stocker dans 
+ * *col_names qui est un ensemble de mystring
+ * Ici maintenant gais contient le gain cumulule de chaque colnames
+* arguments for the shufle functio
+*/
+typedef struct ShufleArg
+{
+    MapperArg *mapargs; //mappers argument, whith field
+    int length_mapargs; //nombre de mapargs
+
+    MyString *colnames; //set of intermediate key values computed by Map
+    double *gains;
+    int length_gains;
+
+} ShufleArg;
+
+/*
+* when a reducer ends it job, it modifies, ReducerArg.key
+* and ReducerArg.gain. 
+* so &ReducerArg must be taken as reducer parameter.
+*/
+typedef struct ReducerArg
+{
+    ShufleArg *shufle; // the shufle output list
+    MyString key; //output: the col name attribute that maximize the gain
+    int bestcol; //index de la meilleure colonne
+    double gain;  //output: the max gain.
+
+} ReducerArg;

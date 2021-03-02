@@ -8,10 +8,4 @@ All the declarations of function are in **Header** folder and implementation are
 # How to run
 
 Actualy, you can run test with the command 
-
 **gcc -o main ./Header/\*.h ./Source/\*.c -lm -lpthread main.c && ./main**
-
-After run, consult the Folder **Output** you will see inside the xml description of decision tree 
-constructed by our programm.
-
-

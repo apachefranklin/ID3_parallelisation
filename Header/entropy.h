@@ -10,15 +10,13 @@
 /**
  * Cette fonction prend calcule l'entropy sur une portion du jeu de donnees
  * Cette portion peut etre total ou bien elle partiel
- * @param **x qui represente l'ensemble des features Categoriel
- * @param *y qui represente l'ensemble des labels categoriel
- * @param nb_line qui represente ici le nombre line de notre jeu de donnees
+ * @param *y:int qui represente l'ensemble des labels categoriel
+ * @param y_size:int le nombre d'element contenu dans *y
+ * @param nb_line qui represente ici le coeffcient par le quel l'entropie sera divisise, en general il est egal=y_size
  * @param nb_feature qui est le nombre d'attribut
- * @return float entropy (Base sur l'algorithme ID3)
+ * @return float entropy (Basé sur l'algorithme ID3)
 **/
-
-
-double entropy_general(MyString *y,int nb_line);
+double entropy_general(MyString *y,int y_size,int real_size);
 
 
 /**
@@ -29,6 +27,7 @@ double entropy_by_dataset(Dataset *dataset);
 
 
 /**
+ * Cette est fonction l'equivalente Hxaj=v dans le calcul de l'entropy
  * Cette fonction prend en entre une liste de feature
  * un index de column et une valeur de cette column ensuite
  * Calul l'entropy de cet echantillon et retourne une liste de nombre

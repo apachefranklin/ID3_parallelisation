@@ -183,6 +183,7 @@ Dataset *dataset_col_and_val(Dataset *dataset, int col_index, char val[])
     }
     Dataset *toreturn = (Dataset *)malloc(1 * sizeof(*toreturn));
     toreturn->rows = nb_unique;
+    toreturn->real_size=nb_unique;
     toreturn->features = _features;
     toreturn->colnames = dataset->colnames;
     toreturn->targets = _targets;
@@ -263,4 +264,23 @@ char *getTabulation(int nb){
     for(int i=0;i<nb;i++) to_return[i]='\t';
     to_return[nb]='\0';
     return to_return;
+}
+
+int get_good_nb_threads(int size,int length_portion){
+    int nb_times=size/length_portion;
+    int data_rest=size-(length_portion*nb_times); //ici c'est le reste de donnees
+    if(data_rest>0){
+        nb_times++;
+    }
+    return nb_times;
+}
+
+int index_in_mystring_list(MyString mstring,MyString list[],int size){
+    int index=-1;
+    for(int i=0;i<size,index<0;i++){
+        if(strcmp(mstring.value,list[i].value)==0){
+            index=i;
+        }
+    }
+    return index;
 }

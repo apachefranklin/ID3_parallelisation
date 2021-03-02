@@ -112,41 +112,15 @@ void inMemomeryBuild(Node *noeud, Dataset *dataset, int cols_to_avoid[], int nb_
             inMemomeryBuild(&(noeud->fils[i]), dataset_split[i], to_ingore, nb_cols);
         }
     }
-
-    /*
-    for(int i=0;i<nbuniques;i++){
-        stop=stoppingCriteria(dataset_split[i]);
-        printf("---->\nPour la valeur la valeur %s le stopping criteria ",uniques.feature[i].value);
-        if(stop==1){
-            
-                on decide ici que le noeud fils correspondant
-                a i est une prediction et son nom va etre le target
-                de notre arbre 
-            
-           strcpy(noeud->fils[i].name,dataset_split[i]->targets[0].value);
-           noeud->fils[i].prediction=1; //ce noeud est une prediction
-            printf("est respecté\n");
-        }
-        else {printf("n'est pas respecté\n");}
-        print_dataset(dataset_split[i]);
-    }
-    //maintenant que nous avons les datasets pour chaque valeur de la meilleure colonne
-    */
 }
 
-Dataset *findPrediction(Dataset *datatset)
-{
-    Dataset *_dataset = (Dataset *)malloc(sizeof(*_dataset));
-
-    return _dataset;
-}
 
 void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, int branche_index, int if_root, int decalage)
 {
     //on commence d'abord par ecrire les decalages dans le fichier
     fputs(getTabulation(decalage), outputfile);
     //maintenant nous devons ecrire le noeud et ses attributs
-    fprintf(outputfile,"<node name='%s' prediction='%d' frombranch='%s' index='%d'>",noeud->name,noeud->prediction,branche_name,branche_index);
+    fprintf(outputfile, "<node name='%s' prediction='%d' frombranch='%s' index='%d'>", noeud->name, noeud->prediction, branche_name, branche_index);
     //maintenant nous devons ecrire les branches
     if (noeud->prediction == 1)
     {
@@ -154,12 +128,12 @@ void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, 
     }
     else
     {
-        fprintf(outputfile,"\n%s<son>\n",getTabulation(decalage+1));
+        fprintf(outputfile, "\n%s<son>\n", getTabulation(decalage + 1));
         for (int i = 0; i < noeud->length; i++)
         {
             //on insere le nombre d'element necessaire pour faire un bon decalage
             fputs(getTabulation(decalage + 1), outputfile);
-            decisionTreeDescription(&(noeud->fils[i]), outputfile, noeud->branches[i].value,i,0,decalage + 1);
+            decisionTreeDescription(&(noeud->fils[i]), outputfile, noeud->branches[i].value, i, 0, decalage + 1);
         }
         fputs(getTabulation(decalage + 1), outputfile);
         fputs("</son>\n", outputfile);
@@ -167,6 +141,7 @@ void decisionTreeDescription(Node *noeud, FILE *outputfile, char *branche_name, 
         fputs("</node>", outputfile);
     }
 }
+
 MyString predict_from_feature(Node noeud, MyString *line, MyString *att_rnames, int n_attr)
 {
     MyString pred_target;
@@ -220,7 +195,7 @@ Vector predict_from_dataset(Model model, Dataset dst)
     {
         pred = predict_from_feature(model.root_node, dst.features[i].feature, dst.colnames, dst.cols);
         strcpy(pred_targets.values[i].value, pred.value);
-        printf("%d »» expect: %15s obtained: %15s\n", i, dst.targets[i].value, pred.value);
+        printf("%d »» expected: %15s\t obtained: %15s\n", i, dst.targets[i].value, pred.value);
     }
     printf("%15s%15s", "", "END PREDICTION\n");
 
@@ -241,8 +216,88 @@ Model make_tree_model(Dataset *dataset)
     }
 
     Node *noeud = (Node *)malloc(sizeof(*noeud));
+
     inMemomeryBuild(noeud, dataset, cols_to_avoid, dataset->cols);
 
     tree.root_node = *noeud;
     return tree;
+}
+
+
+
+void test_decision_tree()
+{
+    char dataPath[] = "Data/data.txt";
+    char headerPath[] = "Data/header.txt";
+    char labelsPath[] = "Data/label.txt";
+    int *fileInfo = file_information(dataPath, ";");
+    int rows = *(fileInfo + 1), cols = *(fileInfo + 2);
+
+    Feature *features = file_content(dataPath, ";");
+    Feature *_labels = file_content("Data/label.txt", ";");
+    MyString *labels = (MyString *)malloc(rows * sizeof(*labels));
+    Feature *_headers = file_content("Data/header.txt", ";");
+    MyString *colnames = (MyString *)malloc(rows * sizeof(*colnames));
+
+    //mise des labels dans une structure MyString
+    for (int i = 0; i < rows; i++)
+        labels[i] = _labels[i].feature[0];
+    //mise des headers dans une structure Mystring*
+    for (int i = 0; i < cols; i++)
+        colnames[i] = _headers[i].feature[0];
+    Dataset dataset = {features, colnames, labels, rows, cols};
+    //test de la fonction get_unique by_feature list
+    Feature uniques = get_unique_elementF(&dataset, 1);
+    printf("\n_____________________________________________\n\n");
+
+    for (int i = 0; i < uniques.id; i++)
+    {
+        printf("%s :: ", uniques.feature[i].value);
+    }
+
+    int nb_unique2 = nb_times_inF(&dataset, uniques.feature[0].value, 1);
+    Dataset *testcut = dataset_col_and_val(&dataset, 1, uniques.feature[0].value);
+    printf("\n_____________________________________________\n\n");
+    printf("Nb unique = %d\n\n", nb_unique2);
+    for (int i = 0; i < nb_unique2; i++)
+    {
+        for (int j = 0; j < cols; j++)
+            printf("%s::", testcut->features[i].feature[j].value);
+        printf("\n\n");
+    }
+    printf("\n1_____________________________________________1\n\n");
+    print_dataset(testcut);
+    printf("\n\n**Entropy test ***\n");
+    double hx = entropy_general(labels, rows,rows);
+    double hx2 = entropy_by_dataset(&dataset);
+    printf("entropy = %f\n", hx);
+    printf("entropy by dataset = %f\n", hx2);
+
+    printf("\n\n**** Maintenant nous passons a la construction de l'arbre *** \n\n");
+
+    // Node *noeud = (Node *)malloc(sizeof(*noeud));
+    // int cols_to_avoid[cols];
+    // for (int i = 0; i < cols; i++)
+    //     cols_to_avoid[i] = -1;
+
+    Model id3_tree = make_tree_model(&dataset);
+
+    //inMemomeryBuild(noeud, &dataset, cols_to_avoid, cols);
+
+    FILE *outputtree = fopen("Output/output_tree3.xml", "w");
+    decisionTreeDescription(&(id3_tree.root_node), outputtree, "", 0, 1, 0);
+    fclose(outputtree);
+
+    //MyString pred1 = predict_from_feature(id3_tree.root_node, dataset.features[1].feature, dataset.colnames, dataset.cols);
+    //printf("Prediction: %s\n\n", pred1.value);
+
+    Vector pred_tgts = predict_from_dataset(id3_tree, dataset);
+
+    free(features);
+    free(_labels);
+    free(labels);
+    free(_headers);
+    free(colnames);
+    free(fileInfo);
+    free(testcut);
 }

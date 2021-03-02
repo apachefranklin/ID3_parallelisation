@@ -20,7 +20,7 @@ int main()
     //mise des headers dans une structure Mystring*
     for (int i = 0; i < cols; i++)
         colnames[i] = _headers[i].feature[0];
-    Dataset dataset = {features, colnames, labels, rows, cols};
+    Dataset dataset = {features, colnames, labels, rows, cols,rows};
     //test de la fonction get_unique by_feature list
     Feature uniques = get_unique_elementF(&dataset, 1);
     printf("\n_____________________________________________\n\n");
@@ -43,27 +43,77 @@ int main()
     printf("\n1_____________________________________________1\n\n");
     print_dataset(testcut);
     printf("\n\n**Entropy test ***\n");
-    double hx = entropy_general(labels, rows);
+    double hx = entropy_general(labels, rows,rows);
     double hx2 = entropy_by_dataset(&dataset);
     printf("entropy = %f\n", hx);
     printf("entropy by dataset = %f\n", hx2);
 
     printf("\n\n**** Maintenant nous passons a la construction de l'arbre *** \n\n");
-    
-    Node *noeud=(Node*)malloc(sizeof(*noeud));
-    int cols_to_avoid[cols];
-    for(int i=0;i<cols;i++) cols_to_avoid[i]=-1;
-    inMemomeryBuild(noeud,&dataset,cols_to_avoid,cols);
 
-    FILE *outputtree=fopen("Output/output_tree.xml","w");
-    decisionTreeDescription(noeud,outputtree,"",0,1,0);
-    fclose(outputtree);
+    // Node *noeud = (Node *)malloc(sizeof(*noeud));
+    // int cols_to_avoid[cols];
+    // for (int i = 0; i < cols; i++)
+    //     cols_to_avoid[i] = -1;
 
     Model id3_tree = make_tree_model(&dataset);
+    int out_of_memory=7;
+    Model parallel_tree=makeParallelTree(&dataset,out_of_memory);
+
+    //inMemomeryBuild(noeud, &dataset, cols_to_avoid, cols);
+
+    FILE *outputtree = fopen("Output/output_tree3.xml", "w");
+        decisionTreeDescription(&(id3_tree.root_node), outputtree, "", 0, 1, 0);
+    fclose(outputtree);
+
+    FILE *outputtrees = fopen("Output/output_parallel_tree3.xml", "w");
+        decisionTreeDescription(&(parallel_tree.root_node), outputtrees, "", 0, 1, 0);
+    fclose(outputtrees);
+
+
     //MyString pred1 = predict_from_feature(id3_tree.root_node, dataset.features[1].feature, dataset.colnames, dataset.cols);
     //printf("Prediction: %s\n\n", pred1.value);
 
     Vector pred_tgts = predict_from_dataset(id3_tree, dataset);
+    //test_decision_tree();
+    //test_parallel_decision_tree();
 
+    printf("\n****************************\n");
+    printf("Out of memory=%d\n\n\n",OUT_OF_MEMORY_LENGTH);
+    print_dataset(&dataset);
+    
+    int number=7;
+    MapperArg *mappargs=createTreeMapperArgs(&dataset,number);
+    int nbtimes=get_good_nb_threads(dataset.real_size,number);
+    
+    MapperArg *gthy=&mappargs[0];
+    int *colsfg=(int*)malloc(sizeof(dataset.cols*sizeof(*colsfg)));
+    
+    gthy->cols_to_avoid=colsfg;
+        printf("\n\nbonjour\n\n");
+
+    for(int i=0;i<dataset.cols;i++){
+        gthy->cols_to_avoid[i]=-1;
+    }
+    MapperArg *gthy2=&mappargs[1];
+    gthy2->cols_to_avoid=gthy->cols_to_avoid;
+    //print_dataset(gthy->dataset);
+    map_id3(gthy);
+    map_id3(gthy2);
+    printf("---->>> le nombre de output est %d\n",gthy->npair);
+    for(int i=0;i<gthy->npair;i++){
+        printf("Le gain de la colone %s est %f \n",gthy2->output[i].key.value,gthy2->output[i].value);
+    }
+     hx = entropy_general(labels, rows,rows);
+     hx2 = entropy_by_dataset(&dataset);
+     double gain=information_gain(hx2,&dataset,0);
+     double gain2=entropy_by_dataset(gthy2->dataset);
+     printf("\nLe gain d'information de la colonne est %d\n\n",gthy->dataset->real_size);
+     //print_dataset(gthy2->dataset);
+
+     printf("\n\nRecherche avec le parallel best split\n\n");
+     printf("\n\n**************************************\n\n");
+     int *cols_to_avoid=(int*)malloc(2*sizeof(*cols_to_avoid));
+     int best=findParallelBestSplit(&dataset,cols_to_avoid,0,number);
+     printf("The best is there the best %d\n",best);
     return 0;
 }

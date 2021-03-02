@@ -1,17 +1,17 @@
 #include "../Header/tree_learnng.h"
 
-double entropy_general(MyString *y, int nb_line)
+double entropy_general(MyString *y,int y_size,int real_size)
 {
     //on recupere la taille des elements du tableau
     //printf("\n--Welcome to entropy function --\n");
     char temp[100];
-    double lines = (double)nb_line, nb_times, frequence = 0.0, entropy = 0.0;
-    Feature uniquesd = get_unique_element(y, nb_line);
+    double lines = (double)y_size, nb_times, frequence = 0.0, entropy = 0.0;
+    Feature uniquesd = get_unique_element(y, y_size);
     for (int i = 0; i < uniquesd.id; i++)
     {
         strcpy(temp, uniquesd.feature[i].value);
-        nb_times = (double)nb_times_in(temp, y, nb_line);
-        frequence = nb_times / nb_line;
+        nb_times = (double)nb_times_in(temp, y, y_size);
+        frequence = nb_times / y_size;
         frequence = -(frequence * log2(frequence));
         entropy += frequence;
     }
@@ -21,7 +21,7 @@ double entropy_general(MyString *y, int nb_line)
 
 double entropy_by_dataset(Dataset *dataset)
 {
-    return entropy_general(dataset->targets, dataset->rows);
+    return entropy_general(dataset->targets, dataset->rows,dataset->real_size);
 }
 
 double *entropy_by_column_and_val(Dataset *dataset, int col_index, char *value)
@@ -51,7 +51,7 @@ double *entropy_by_column_and_val(Dataset *dataset, int col_index, char *value)
         //printf("c-%d -> %s\n",i,column[i].value)
     }
     //printf("Le size la est %d\n",size_for_val);
-    entropy_by_val = entropy_general(labels_for_val, size_for_val);
+    entropy_by_val = entropy_general(labels_for_val, size_for_val,dataset->real_size);
     //printf("Yo les gars %f\n",entropy_by_val);
     double *toreturn = (double *)malloc(4 * sizeof(*toreturn));
     toreturn[0] = entropy_by_val;
