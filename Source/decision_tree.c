@@ -228,29 +228,22 @@ int findParallelBestSplit(Dataset *dataset,int *cols_to_avoid,int nb_cols,int ou
     //determination du nombre de threads
     int nb_threads=get_good_nb_threads(rows,out_of_memory);
     pthread_t *threads_list=(pthread_t*)malloc(nb_threads*sizeof(*threads_list));
-    int *cols_to_consider=(int*)malloc(nb_cols*sizeof(*cols_to_consider));
-    for(int j=0;j<nb_cols;j++){
-        cols_to_consider[j]=j;
-        if(exist_ini(j,cols_to_avoid,nb_cols)){
-            cols_to_consider[j]=-1;
-        }
-    }
     //creons les differents mapargs
     MapperArg *mapargs=createTreeMapperArgs(dataset,out_of_memory);
     //maintenant que nous avons les differents mappargs
     //affectons chaqu'un a un threads
     for (int i=0;i<nb_threads;i++){
-        mapargs[i].cols=cols_to_consider;
+        mapargs[i].cols_to_avoid=cols_to_avoid;
         pthread_create(&threads_list[i],NULL,map_id3,&mapargs[i]);
     }
     //une fois ceci fait nous faisons des pthreads join pour attendre que le processus se termine
     for(int i=0;i<nb_threads;i++){
         pthread_join(threads_list[i],NULL);
     }
-
-   /*  for(int i=0;i<nb_threads;i++){
+/*
+   for(int i=0;i<nb_threads;i++){
         printf("\n In maparg %i we have the following gain \n-------------\n",i);
-        for (int j=0;j<mapargs[i].cols;j++){
+        for (int j=0;j<dataset->cols;j++){
             printf("Le gain de la colone %s est %f\n",mapargs[i].output[j].key.value,mapargs[i].output[j].value);
         }
         printf("\n In we have the following gain \n-------------\n");

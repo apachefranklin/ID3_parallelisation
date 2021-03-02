@@ -61,7 +61,7 @@ void* map_id3(void *args)
         strcpy(maparg->output[i].key.value, dataset->colnames[i].value);
         maparg->output[i].value = 0.0;
         printf("***Construction du map %i\n",i);
-        if (exist_ini(i, maparg->cols, cols) == 1)
+        if (exist_ini(i, maparg->cols_to_avoid, cols) == 0)
         {
             maparg->output[i].value =(maparg->weigth)*(information_gain(h_x, dataset, i));
             printf("\nPour la colone %s d'indice %d son gain est %f\n",maparg->output[i].key.value,i,maparg->output[i].value);

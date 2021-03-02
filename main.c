@@ -81,17 +81,21 @@ int main()
     MapperArg *gthy=&mappargs[0];
     int *colsfg=(int*)malloc(sizeof(dataset.cols*sizeof(*colsfg)));
     
-    gthy->cols=colsfg;
+    gthy->cols_to_avoid=colsfg;
         printf("\n\nbonjour\n\n");
 
     for(int i=0;i<dataset.cols;i++){
-        gthy->cols[i]=i;
+        gthy->cols_to_avoid[i]=i;
     }
     MapperArg *gthy2=&mappargs[1];
-    gthy2->cols=gthy->cols;
+    gthy2->cols_to_avoid=gthy->cols_to_avoid;
     //print_dataset(gthy->dataset);
     map_id3(gthy);
     map_id3(gthy2);
+    printf("---->>> le nombre de output est %d\n",gthy->npair);
+    for(int i=0;i<gthy->npair;i++){
+        printf("Le gain de la colone %s est %f \n",gthy2->output[i].key.value,gthy2->output[i].value);
+    }
      hx = entropy_general(labels, rows,rows);
      hx2 = entropy_by_dataset(&dataset);
      double gain=information_gain(hx2,&dataset,0);
@@ -102,7 +106,7 @@ int main()
      printf("\n\nRecherche avec le parallel best split\n\n");
      printf("\n\n**************************************\n\n");
      int *cols_to_avoid=(int*)malloc(2*sizeof(*cols_to_avoid));
-     int best=findParallelBestSplit(&dataset,cols_to_avoid,0,number);
-     printf("The best is there the best %d\n",best);
+     //int best=findParallelBestSplit(&dataset,cols_to_avoid,0,number);
+     //printf("The best is there the best %d\n",best);
     return 0;
 }

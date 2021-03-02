@@ -114,7 +114,7 @@ typedef struct MapperArg
 {
     int id_map;
     Dataset *dataset;
-    int *cols; // col indexes to be considered
+    int *cols_to_avoid; // col indexes to be avoided
     double weigth; //represente le poids qu'on va multiplier les entropys et les gains d'information avec
     int ncol;  //lengh of col indexes
     int *rows; //
